@@ -1,7 +1,11 @@
 package com.example.drawing;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,11 +22,12 @@ public class Pickcolor extends Activity implements OnColorChangedListener{
 		private OpacityBar opacityBar;
 		private Button button;
 		private TextView text;
+		public int color;
 	 
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
-			setContentView(R.layout.activity_main);
+			setContentView(R.layout.activity_pickcolor);
 			
 			picker = (ColorPicker) findViewById(R.id.picker);
 			svBar = (SVBar) findViewById(R.id.svbar);
@@ -38,12 +43,43 @@ public class Pickcolor extends Activity implements OnColorChangedListener{
 				
 				@Override
 				public void onClick(View v) {
-					text.setTextColor(picker.getColor());
-					picker.setOldCenterColor(picker.getColor());
+					color=picker.getColor();
+					text.setTextColor(color);
+					picker.setOldCenterColor(color);
+					CrtanjeView.boja.setColor(color);
+					CrtanjeView.putanja = new mojaPutanja(new Paint(CrtanjeView.boja));
+			        CrtanjeView.paths.add(CrtanjeView.putanja);
+					onBackPressed();
 				}
 			});
 		}
 	 
+		@Override
+		public void onBackPressed() {
+			// TODO Auto-generated method stub
+			super.onBackPressed();
+		}
+		
+		
+
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			// TODO Auto-generated method stub
+			switch(item.getItemId()){
+			case R.id.action_done:
+				color=picker.getColor();
+				text.setTextColor(color);
+				picker.setOldCenterColor(color);
+				CrtanjeView.boja.setColor(color);
+				CrtanjeView.putanja = new mojaPutanja(new Paint(CrtanjeView.boja));
+		        CrtanjeView.paths.add(CrtanjeView.putanja);
+				onBackPressed();
+				return true;
+			default: return false;
+			
+			}
+		}
+
 		@Override
 		public void onColorChanged(int color) {
 			//gives the color when it's changed.

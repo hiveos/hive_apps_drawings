@@ -92,7 +92,7 @@ public class DialogAdapter {
 
 	}
 
-	//////// POSTAVLJANJE 2. DIALOGA (ZA BOJU) ////////
+	/*//////// POSTAVLJANJE 2. DIALOGA (ZA BOJU) ////////
 	public void postaviDialogZaBoju() {
 		// Postupak ĹĄto se samog dialoga je identiÄan kao i u proĹĄloj metodi. Jedino su sada drugaÄiji elementi i drugaÄiji xml fajl
 		final Dialog dialog = new Dialog(kontekst);
@@ -143,6 +143,6 @@ public class DialogAdapter {
 		// Opet prikaz dialoga
 		dialog.show();
 
-	}
+	}*/
 
 }

@@ -3,63 +3,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
     <com.larswerkman.holocolorpicker.ColorPicker
-    android:id="@+id/picker"
-    android:layout_width="322dp"
+        android:id="@+id/picker"
+        android:layout_width="wrap_content"
         android:layout_height="112dp"
         android:layout_gravity="center"
-        android:layout_margin="8dip"/>
-    
+        android:layout_margin="8dip"
+        android:layout_weight="0.35" />
+
     <com.larswerkman.holocolorpicker.SVBar
-    android:id="@+id/svbar"
-    android:layout_width="322dp"
+        android:id="@+id/svbar"
+        android:layout_width="322dp"
         android:layout_height="112dp"
         android:layout_gravity="center"
-        android:layout_margin="8dip"/>
-    
+        android:layout_margin="8dip" />
+
     <com.larswerkman.holocolorpicker.OpacityBar
-    android:id="@+id/opacitybar"
-    android:layout_width="322dp"
+        android:id="@+id/opacitybar"
+        android:layout_width="322dp"
         android:layout_height="112dp"
         android:layout_gravity="center"
-        android:layout_margin="8dip"/>
-    
-    <com.larswerkman.holocolorpicker.SaturationBar
-    android:id="@+id/saturationbar"
-    android:layout_width="322dp"
-        android:layout_height="112dp"
-        android:layout_gravity="center"
-        android:layout_margin="8dip"/>
-    
-    <com.larswerkman.holocolorpicker.ValueBar
-    android:id="@+id/valuebar"
-    android:layout_width="322dp"
-        android:layout_height="112dp"
-        android:layout_gravity="center"
-        android:layout_margin="8dip"/>
-    
+        android:layout_margin="8dip" />
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="2" >
- 
+
         <Button
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Change Color"
-            android:layout_weight="1" />
- 
+            android:layout_weight="1"
+            android:text="Change Color" />
+
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Text Color"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:layout_weight="1" />
- 
+            android:textSize="20sp" />
     </LinearLayout>
-    
+
 </LinearLayout>

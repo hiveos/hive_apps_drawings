@@ -19,12 +19,6 @@
         android:title="Color"/>
     
     <item
-        android:id="@+id/action_done"
-        android:orderInCategory="100"
-        android:showAsAction="ifRoom"
-        android:title="Done"/>
-    
-    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"

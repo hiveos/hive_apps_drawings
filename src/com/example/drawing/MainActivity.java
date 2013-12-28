@@ -25,17 +25,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends Activity implements OnColorChangedListener {
 
 	CrtanjeView cv;
-	ColorPicker picker;
-	SVBar svBar;
-	OpacityBar opacityBar;
-	SaturationBar saturationBar;
-	ValueBar valueBar;
-	Button button;
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -116,12 +110,6 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 			return true;
 		case R.id.action_color:
 			dijalogZaBoju();
-		case R.id.action_done:
-			CrtanjeView.boja.setColor(picker.getColor());
-			CrtanjeView.putanja = new mojaPutanja(new Paint(CrtanjeView.boja));
-	        CrtanjeView.paths.add(CrtanjeView.putanja);
-			picker.setOldCenterColor(picker.getColor());
-			setContentView(R.layout.activity_main);
 			return true;
 		default:
 			return false;

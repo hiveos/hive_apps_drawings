@@ -2,10 +2,9 @@ package com.example.drawing;
 
 import android.R.color;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -126,12 +125,6 @@ public class QuickAction implements OnTouchListener {
 					// Ako je odabran gumb na 0. poziciji, onda se prikazuje dialog za debljinu
 					dialog.postaviDialogZaDebljinu();
 					debljina = true;
-					break;
-				case 1:
-					// Ako je odabran na 1. poziciji, onda se prikazuje dialog za boju
-					//dialog.postaviDialogZaBoju();
-					ma.dijalogZaBoju();
-					boja = true;
 					break;
 				case 2:
 					// Ako je odabran button na 2. poziciji, onda se dobija gumica
