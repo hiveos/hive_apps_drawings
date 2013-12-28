@@ -6,7 +6,10 @@ import java.io.FileOutputStream;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap.CompressFormat;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -47,7 +50,33 @@ public class MainActivity extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		cv.mijenjan=false;
 
+	}
+	
+	
+
+	@Override
+	public void onBackPressed() {
+		if(cv.mijenjan==true)
+		{
+			new AlertDialog.Builder(this)
+	        .setMessage("Do you want to save your drawing?")
+	        .setCancelable(false)
+	        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int id) {
+	            	snimi();
+	                 MainActivity.this.finish();
+	            }
+	        })
+	        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int id) {
+	                 MainActivity.this.finish();
+	            }
+	        })
+	        .show();
+		}
+		else MainActivity.this.finish();
 	}
 
 	@Override

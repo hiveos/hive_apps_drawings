@@ -17,6 +17,7 @@ import android.view.View;
 public class CrtanjeView extends View {
 
 	public static Paint boja;
+	public Boolean mijenjan=false;
 	public static mojaPutanja putanja;
 	private Paint krugBoja;
 	private Path krugPutanja;
@@ -98,7 +99,6 @@ public class CrtanjeView extends View {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-
 		for (mojaPutanja p : paths) {
 			canvas.drawPath(p, p.bojaPutanje);
 			mCanvas.drawPath(p, p.bojaPutanje);
@@ -112,6 +112,7 @@ public class CrtanjeView extends View {
 
 		float tackaX = e.getX();
 		float tackaY = e.getY();
+		mijenjan=true;
 
 		switch (e.getAction()) {
 		case MotionEvent.ACTION_DOWN:
