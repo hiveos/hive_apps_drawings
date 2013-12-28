@@ -90,6 +90,8 @@ public class MainActivity extends Activity {
 		case R.id.action_settings:
 			cv.otvoriMenu();
 			return true;
+		case R.id.action_clear:
+			cv.ocistiFunkcija();
 		default:
 			return false;
 		}

@@ -67,6 +67,22 @@ public class CrtanjeView extends View {
 		qa = new QuickAction(this);
 
 	}
+	public void osvjezi()
+	{
+		postInvalidate();
+	}
+	
+	public void ocistiFunkcija() {
+		//Klikom na erase button, poziva se ocistiFunkcija koja brise trenutne pathove na
+		//canvasu
+		
+		Log.d("hepek", "pozvano");
+		for (mojaPutanja p : paths) {
+			p.reset();
+		}
+		mCanvas.drawColor(Color.WHITE);
+		postInvalidate();
+	}
 
 	private void postaviKist() {
 

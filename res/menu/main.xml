@@ -7,6 +7,12 @@
         android:title="Save"/>
     
     <item
+        android:id="@+id/action_clear"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:title="Clear"/>
+    
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
