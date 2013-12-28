@@ -49,9 +49,10 @@ public class CrtanjeView extends View {
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		// TODO Auto-generated method stub
-		super.onSizeChanged(w, h, oldw, oldh);
 		MyBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
 		mCanvas = new Canvas(MyBitmap);
+		mCanvas.drawColor(Color.WHITE);
+		super.onSizeChanged(w, h, oldw, oldh);
 	}
 
 	private void inicijalizacija(Context k) {

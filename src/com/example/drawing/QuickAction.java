@@ -132,9 +132,8 @@ public class QuickAction implements OnTouchListener {
 					break;
 				case 2:
 					// Ako je odabran button na 2. poziciji, onda se dobija gumica
-					CrtanjeView.boja.setMaskFilter(null);
-					CrtanjeView.boja.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-					CrtanjeView.boja.setAlpha(0xFF);//transperent color
+					CrtanjeView.boja.setColor(Color.WHITE);
+					CrtanjeView.boja.setStrokeWidth(15);
 					CrtanjeView.putanja = new mojaPutanja(new Paint(CrtanjeView.boja));
 			        CrtanjeView.paths.add(CrtanjeView.putanja);
 					prozor.dismiss();
