@@ -3,39 +3,36 @@ package com.example.drawing;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import com.larswerkman.holocolorpicker.ColorPicker;
-import com.larswerkman.holocolorpicker.ColorPicker.OnColorChangedListener;
-import com.larswerkman.holocolorpicker.OpacityBar;
-import com.larswerkman.holocolorpicker.SVBar;
-import com.larswerkman.holocolorpicker.SaturationBar;
-import com.larswerkman.holocolorpicker.ValueBar;
-
-import android.os.Bundle;
-import android.os.Environment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Bitmap.CompressFormat;
-import android.view.KeyEvent;
+import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.larswerkman.holocolorpicker.ColorPicker.OnColorChangedListener;
 
 public class MainActivity extends Activity implements OnColorChangedListener {
 
 	CrtanjeView cv;
-	
+	int value = 0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		cv = (CrtanjeView)findViewById(R.id.view1);
+		cv = (CrtanjeView) findViewById(R.id.view1);
+
 	}
 
 	@Override
@@ -44,8 +41,8 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
-	private void snimi(){
+
+	private void snimi() {
 		File gdjeSnimiti = new File(Environment.getExternalStorageDirectory()
 				+ "/HIVE/Drawings/");
 		if (!gdjeSnimiti.exists()) {
@@ -65,45 +62,41 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		cv.mijenjan=false;
+		cv.mijenjan = false;
 
 	}
-	
-	
 
 	@Override
 	public void onBackPressed() {
-		if(cv.mijenjan==true)
-		{
+		if (cv.mijenjan == true) {
 			new AlertDialog.Builder(this)
-	        .setMessage("Do you want to save your drawing?")
-	        .setCancelable(false)
-	        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-	            public void onClick(DialogInterface dialog, int id) {
-	            	snimi();
-	                 MainActivity.this.finish();
-	            }
-	        })
-	        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-	            public void onClick(DialogInterface dialog, int id) {
-	                 MainActivity.this.finish();
-	            }
-	        })
-	        .show();
-		}
-		else MainActivity.this.finish();
+					.setMessage("Do you want to save your drawing?")
+					.setCancelable(false)
+					.setPositiveButton("Yes",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									snimi();
+									MainActivity.this.finish();
+								}
+							})
+					.setNegativeButton("No",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									MainActivity.this.finish();
+								}
+							}).show();
+		} else
+			MainActivity.this.finish();
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
-		switch(item.getItemId())
-		{
+		switch (item.getItemId()) {
 		case R.id.action_save:
 			snimi();
-			return true;
-		case R.id.action_settings:
-			cv.otvoriMenu();
 			return true;
 		case R.id.action_clear:
 			cv.ocistiFunkcija();
@@ -111,21 +104,78 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		case R.id.action_color:
 			dijalogZaBoju();
 			return true;
+		case R.id.action_eraser:
+			CrtanjeView.boja.setColor(Color.WHITE);
+			CrtanjeView.putanja = new mojaPutanja(new Paint(CrtanjeView.boja));
+			CrtanjeView.paths.add(CrtanjeView.putanja);
+			return true;
+		case R.id.action_size:
+			dijalogZaDebljinu();
+			return true;
 		default:
 			return false;
 		}
 	}
-	
-	public void dijalogZaBoju(){
+
+	public void dijalogZaDebljinu() {
+		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle("Brush size");
+		final TextView text = new TextView(this);
+		text.setText("Hello Android");
+		text.setPadding(10, 10, 10, 10);
+		LinearLayout linear = new LinearLayout(this);
+		linear.setOrientation(1);
+		SeekBar seek = new SeekBar(this);
+		linear.addView(seek);
+		linear.addView(text);
+		alert.setView(linear);
+
+		seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+			public void onStopTrackingTouch(SeekBar bar) {
+				value = bar.getProgress(); // the value of the seekBar progress
+			}
+
+			public void onStartTrackingTouch(SeekBar bar) {
+			}
+
+			public void onProgressChanged(SeekBar bar, int paramInt,
+					boolean paramBoolean) {
+				value = paramInt;
+				text.setText("" + paramInt + "%"); // here in textView the
+													// percent will be shown
+			}
+		});
+
+		alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				CrtanjeView.boja.setStrokeWidth((float) value);
+				CrtanjeView.putanja = new mojaPutanja(new Paint(
+						CrtanjeView.boja));
+				CrtanjeView.paths.add(CrtanjeView.putanja);
+				dialog.dismiss();
+			}
+		});
+
+		alert.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+
+		alert.show();
+	}
+
+	public void dijalogZaBoju() {
 		Intent myIntent = new Intent(MainActivity.this, Pickcolor.class);
 		MainActivity.this.startActivity(myIntent);
-		
+
 	}
 
 	@Override
 	public void onColorChanged(int color) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

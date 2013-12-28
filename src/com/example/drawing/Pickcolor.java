@@ -33,7 +33,7 @@ public class Pickcolor extends Activity implements OnColorChangedListener{
 			svBar = (SVBar) findViewById(R.id.svbar);
 			opacityBar = (OpacityBar) findViewById(R.id.opacitybar);
 			button = (Button) findViewById(R.id.button1);
-			text = (TextView) findViewById(R.id.textView1);
+			//text = (TextView) findViewById(R.id.textView1);
 			
 			picker.addSVBar(svBar);
 			picker.addOpacityBar(opacityBar);
@@ -44,7 +44,7 @@ public class Pickcolor extends Activity implements OnColorChangedListener{
 				@Override
 				public void onClick(View v) {
 					color=picker.getColor();
-					text.setTextColor(color);
+					//text.setTextColor(color);
 					picker.setOldCenterColor(color);
 					CrtanjeView.boja.setColor(color);
 					CrtanjeView.putanja = new mojaPutanja(new Paint(CrtanjeView.boja));

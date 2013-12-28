@@ -27,26 +27,6 @@ public class CrtanjeView extends View {
 	public static Bitmap MyBitmap;
 	private Canvas mCanvas;
 
-	// Varijabla za custom klasu QuickAction
-	QuickAction qa;
-
-	final Handler _handler = new Handler();
-	Runnable _longPressed = new Runnable() {
-		public void run() {
-
-			// Poziva se metoda za prikaz QuickAction-a. ToÄnije, prikaĹže se
-			// grid s 1 redom i 3 stupca, a u svakom stupcu je po jedan button
-			qa.pokazi();
-
-			Log.i("hepek", "Pritisnuto je dugo");
-		}
-	};
-	
-	public void otvoriMenu()
-	{
-		qa.pokazi();
-	}
-
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		// TODO Auto-generated method stub
@@ -63,8 +43,6 @@ public class CrtanjeView extends View {
 		boja = new Paint();
 		krugBoja = new Paint();
 		krugPutanja = new Path();
-		// Inicijalizacija qa varijable. ProsljeÄuje joj se trenutni View
-		qa = new QuickAction(this);
 
 	}
 	public void osvjezi()
@@ -133,7 +111,6 @@ public class CrtanjeView extends View {
 		switch (e.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 			putanja.moveTo(tackaX, tackaY);
-			_handler.postDelayed(_longPressed, LONG_PRESS_TIME);
 			return true;
 
 		case MotionEvent.ACTION_MOVE:
@@ -141,14 +118,12 @@ public class CrtanjeView extends View {
 			putanja.lineTo(tackaX, tackaY);
 			krugPutanja.reset();
 			krugPutanja.addCircle(tackaX, tackaY, 25, Path.Direction.CW);
-			_handler.removeCallbacks(_longPressed);
 			break;
 
 		case MotionEvent.ACTION_UP:
 			CrtanjeView.putanja = new mojaPutanja(new Paint(CrtanjeView.boja));
 			CrtanjeView.paths.add(CrtanjeView.putanja);
 			krugPutanja.reset();
-			_handler.removeCallbacks(_longPressed);
 			break;
 
 		default:
