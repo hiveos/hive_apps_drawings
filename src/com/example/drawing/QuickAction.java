@@ -27,6 +27,7 @@ public class QuickAction implements OnTouchListener {
 	private PopupWindow prozor;
 	protected final WindowManager upravljacProzora;
 	private DialogAdapter dialog;
+	MainActivity ma;
 
 	public String[] imena = { "Size", "Colour", "Eraser" };
 	
@@ -44,6 +45,7 @@ public class QuickAction implements OnTouchListener {
 
 		// Treba kreirat GridView (samo preko jave, da se ne gomilaju xml fajlovi bezveze). U njega se kasnije dodaju gumbi
 		gv = new GridView(triggerView.getContext());
+		ma=new MainActivity();
 
 		// Ovo nam sluĹži za kreiranje tzv. dialoga koji iskaÄe kad nam zatreba
 		dialog = new DialogAdapter(triggerView.getContext());
@@ -127,7 +129,8 @@ public class QuickAction implements OnTouchListener {
 					break;
 				case 1:
 					// Ako je odabran na 1. poziciji, onda se prikazuje dialog za boju
-					dialog.postaviDialogZaBoju();
+					//dialog.postaviDialogZaBoju();
+					ma.dijalogZaBoju();
 					boja = true;
 					break;
 				case 2:

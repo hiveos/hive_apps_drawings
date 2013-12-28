@@ -3,19 +3,40 @@ package com.example.drawing;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import com.larswerkman.holocolorpicker.ColorPicker;
+import com.larswerkman.holocolorpicker.ColorPicker.OnColorChangedListener;
+import com.larswerkman.holocolorpicker.OpacityBar;
+import com.larswerkman.holocolorpicker.SVBar;
+import com.larswerkman.holocolorpicker.SaturationBar;
+import com.larswerkman.holocolorpicker.ValueBar;
+
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Bitmap.CompressFormat;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnColorChangedListener {
 
 	CrtanjeView cv;
+	ColorPicker picker;
+	SVBar svBar;
+	OpacityBar opacityBar;
+	SaturationBar saturationBar;
+	ValueBar valueBar;
+	Button button;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -92,11 +113,31 @@ public class MainActivity extends Activity {
 			return true;
 		case R.id.action_clear:
 			cv.ocistiFunkcija();
+			return true;
+		case R.id.action_color:
+			dijalogZaBoju();
+		case R.id.action_done:
+			CrtanjeView.boja.setColor(picker.getColor());
+			CrtanjeView.putanja = new mojaPutanja(new Paint(CrtanjeView.boja));
+	        CrtanjeView.paths.add(CrtanjeView.putanja);
+			picker.setOldCenterColor(picker.getColor());
+			setContentView(R.layout.activity_main);
+			return true;
 		default:
 			return false;
 		}
 	}
 	
-	
+	public void dijalogZaBoju(){
+		Intent myIntent = new Intent(MainActivity.this, Pickcolor.class);
+		MainActivity.this.startActivity(myIntent);
+		
+	}
+
+	@Override
+	public void onColorChanged(int color) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
