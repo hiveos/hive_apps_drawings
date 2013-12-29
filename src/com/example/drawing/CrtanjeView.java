@@ -25,7 +25,7 @@ public class CrtanjeView extends View {
 	public static ArrayList<mojaPutanja> paths = new ArrayList<mojaPutanja>();
 	public static ArrayList<mojaPutanja> undonePaths = new ArrayList<mojaPutanja>();
 	public static Bitmap MyBitmap;
-	private Canvas mCanvas;
+	public Canvas mCanvas;
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -59,6 +59,8 @@ public class CrtanjeView extends View {
 			p.reset();
 		}
 		mCanvas.drawColor(Color.WHITE);
+		Browser.LoadaniCrtez.recycle();
+		mijenjan=true;
 		postInvalidate();
 	}
 
@@ -93,6 +95,10 @@ public class CrtanjeView extends View {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
+		if(!Browser.LoadaniCrtez.isRecycled()){
+		canvas.drawBitmap(Browser.LoadaniCrtez, 0, 0, null);
+		mCanvas.drawBitmap(Browser.LoadaniCrtez, 0, 0, null);
+		}
 		for (mojaPutanja p : paths) {
 			canvas.drawPath(p, p.bojaPutanje);
 			mCanvas.drawPath(p, p.bojaPutanje);

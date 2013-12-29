@@ -12,8 +12,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -43,26 +45,45 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 	}
 
 	private void snimi() {
+		int brojCrteza = new File(Environment.getExternalStorageDirectory()
+				+ "/HIVE/Drawings").listFiles().length;
+		String imeCrteza="Drawing"+brojCrteza+".png";
 		File gdjeSnimiti = new File(Environment.getExternalStorageDirectory()
 				+ "/HIVE/Drawings/");
 		if (!gdjeSnimiti.exists()) {
 			gdjeSnimiti.mkdirs();
 		}
-		int brojCrteza = new File(Environment.getExternalStorageDirectory()
-				+ "/HIVE/Drawings").listFiles().length;
-		File crtez = new File(Environment.getExternalStorageDirectory()
-				+ "/HIVE/Drawings/Drawing" + brojCrteza + ".png");
-		FileOutputStream ostream;
-		try {
-			crtez.createNewFile();
-			ostream = new FileOutputStream(crtez);
-			CrtanjeView.MyBitmap.compress(CompressFormat.PNG, 100, ostream);
-			ostream.flush();
-			ostream.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		cv.mijenjan = false;
+		
+		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+	    final EditText input = new EditText(this);
+	    input.setText(imeCrteza);
+	    alert.setTitle("Pick a name for your drawing:");
+	    alert.setView(input);
+	    alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int whichButton) {
+	            String value = input.getText().toString().trim();
+	            File crtez = new File(Environment.getExternalStorageDirectory()
+	    				+ "/HIVE/Drawings/"+value+".png");
+	            FileOutputStream ostream;
+	    		try {
+	    			crtez.createNewFile();
+	    			ostream = new FileOutputStream(crtez);
+	    			CrtanjeView.MyBitmap.compress(CompressFormat.PNG, 100, ostream);
+	    			ostream.flush();
+	    			ostream.close();
+	    		} catch (Exception e) {
+	    			e.printStackTrace();
+	    		}
+	    		cv.mijenjan = false;
+	        }
+	    });
+
+	    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int whichButton) {
+	            dialog.cancel();
+	        }
+	    });
+	    alert.show();
 
 	}
 
@@ -77,7 +98,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 								public void onClick(DialogInterface dialog,
 										int id) {
 									snimi();
-									MainActivity.this.finish();
+									//MainActivity.this.finish();
 								}
 							})
 					.setNegativeButton("No",
