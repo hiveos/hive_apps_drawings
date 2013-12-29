@@ -71,7 +71,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		if (cv.mijenjan == true) {
 			new AlertDialog.Builder(this)
 					.setMessage("Do you want to save your drawing?")
-					.setCancelable(false)
+					.setCancelable(true)
 					.setPositiveButton("Yes",
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
