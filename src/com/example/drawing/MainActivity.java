@@ -84,6 +84,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
+									cv.ocistiFunkcija();
 									MainActivity.this.finish();
 								}
 							}).show();

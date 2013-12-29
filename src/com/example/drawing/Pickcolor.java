@@ -66,7 +66,7 @@ public class Pickcolor extends Activity implements OnColorChangedListener{
 		public boolean onOptionsItemSelected(MenuItem item) {
 			// TODO Auto-generated method stub
 			switch(item.getItemId()){
-			case R.id.action_done:
+			case R.id.action_changeColor:
 				color=picker.getColor();
 				text.setTextColor(color);
 				picker.setOldCenterColor(color);

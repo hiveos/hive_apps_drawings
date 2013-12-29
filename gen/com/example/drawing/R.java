@@ -138,9 +138,9 @@ containing a value of this type.
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
+        public static final int action_changeColor=0x7f080014;
         public static final int action_clear=0x7f080010;
         public static final int action_color=0x7f080013;
-        public static final int action_done=0x7f080014;
         public static final int action_eraser=0x7f080011;
         public static final int action_save=0x7f08000f;
         public static final int action_size=0x7f080012;

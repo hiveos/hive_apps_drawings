@@ -21,9 +21,9 @@ int dimen color_pointer_radius 0x7f040005
 int dimen color_wheel_radius 0x7f040000
 int dimen color_wheel_thickness 0x7f040001
 int drawable ic_launcher 0x7f020000
+int id action_changeColor 0x7f080014
 int id action_clear 0x7f080010
 int id action_color 0x7f080013
-int id action_done 0x7f080014
 int id action_eraser 0x7f080011
 int id action_save 0x7f08000f
 int id action_size 0x7f080012
