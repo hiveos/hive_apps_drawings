@@ -138,27 +138,27 @@ containing a value of this type.
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
+        public static final int action_add=0x7f08000f;
         public static final int action_changeColor=0x7f080015;
         public static final int action_clear=0x7f080011;
         public static final int action_color=0x7f080014;
         public static final int action_eraser=0x7f080012;
         public static final int action_save=0x7f080010;
         public static final int action_size=0x7f080013;
-        public static final int bBojaOK=0x7f08000b;
-        public static final int bDebljinaOK=0x7f08000e;
-        public static final int button1=0x7f080004;
-        public static final int image=0x7f080005;
+        public static final int bBojaOK=0x7f08000a;
+        public static final int bDebljinaOK=0x7f08000d;
+        public static final int image=0x7f080004;
         public static final int opacitybar=0x7f080003;
         public static final int picker=0x7f080001;
-        public static final int rbCrvena=0x7f080007;
-        public static final int rbPlava=0x7f080008;
-        public static final int rbZelena=0x7f080009;
-        public static final int rgRadio=0x7f080006;
-        public static final int sbDebljina=0x7f08000c;
+        public static final int rbCrvena=0x7f080006;
+        public static final int rbPlava=0x7f080007;
+        public static final int rbZelena=0x7f080008;
+        public static final int rgRadio=0x7f080005;
+        public static final int sbDebljina=0x7f08000b;
         public static final int svbar=0x7f080002;
-        public static final int text1=0x7f08000f;
-        public static final int tvProgress=0x7f08000d;
-        public static final int tvRadio=0x7f08000a;
+        public static final int text1=0x7f08000e;
+        public static final int tvProgress=0x7f08000c;
+        public static final int tvRadio=0x7f080009;
         public static final int view1=0x7f080000;
     }
     public static final class layout {
@@ -170,8 +170,9 @@ containing a value of this type.
         public static final int file_list_row=0x7f030005;
     }
     public static final class menu {
-        public static final int main=0x7f070000;
-        public static final int pickcolor=0x7f070001;
+        public static final int browser=0x7f070000;
+        public static final int main=0x7f070001;
+        public static final int pickcolor=0x7f070002;
     }
     public static final class string {
         public static final int action_settings=0x7f050001;

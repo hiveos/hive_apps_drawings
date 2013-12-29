@@ -20,6 +20,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -40,9 +42,35 @@ public class Browser extends ListActivity {
 			Lokacija.mkdirs();
 		getFiles(new File(Environment.getExternalStorageDirectory() + "/HIVE/Drawings/")
 				.listFiles());
-
-		ActionBar actionBar = getActionBar();
 	}
+	
+	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		getMenuInflater().inflate(R.menu.browser, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		switch(item.getItemId()){
+		case R.id.action_add:
+			File initialDrawing = new File(Environment.getExternalStorageDirectory() + "/HIVE/Drawings/Drawing0.png");
+			Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+			LoadaniCrtez = Bitmap.createBitmap(10, 10, conf);
+			LoadaniCrtez.recycle();
+			Intent myIntent = new Intent(Browser.this, MainActivity.class);
+			Browser.this.startActivity(myIntent);
+			return true;
+		default:
+			return false;
+		}
+	}
+
+
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -59,8 +87,6 @@ public class Browser extends ListActivity {
 				LoadaniCrtez = BitmapFactory.decodeFile(file.getAbsolutePath());
 				Intent myIntent = new Intent(Browser.this, MainActivity.class);
 				Browser.this.startActivity(myIntent);
-		
-
 		}
 	}
 

@@ -63,7 +63,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 	        public void onClick(DialogInterface dialog, int whichButton) {
 	            String value = input.getText().toString().trim();
 	            File crtez = new File(Environment.getExternalStorageDirectory()
-	    				+ "/HIVE/Drawings/"+value+".png");
+	    				+ "/HIVE/Drawings/"+value);
 	            FileOutputStream ostream;
 	    		try {
 	    			crtez.createNewFile();
