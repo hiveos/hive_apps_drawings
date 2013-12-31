@@ -214,8 +214,13 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 			if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
 				closeDrawer();
 				updateSetings();
+				eraserItem.setIcon(R.drawable.ic_eraser);
+				eraserItem.setEnabled(true);
 			} else {
 				openDrawer();
+				eraserItem.setIcon(R.drawable.ic_eraser_disabled);
+				eraserItem.setEnabled(false);
+				
 			}
 			return true;
 
