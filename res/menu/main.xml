@@ -18,16 +18,6 @@
         android:orderInCategory="3"
         android:showAsAction="always"
         android:title="Eraser"/>
-    <!-- <item -->
-    <!-- android:id="@+id/action_size" -->
-    <!-- android:orderInCategory="100" -->
-    <!-- android:showAsAction="ifRoom" -->
-    <!-- android:title="Size"/> -->
-    <!-- <item -->
-    <!-- android:id="@+id/action_color" -->
-    <!-- android:orderInCategory="100" -->
-    <!-- android:showAsAction="ifRoom" -->
-    <!-- android:title="Color"/> -->
     <item
         android:id="@+id/action_drawing_options"
         android:icon="@drawable/ic_brush_settings"

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +35,8 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 
+	private Menu menu;
+
 	private ColorPicker picker;
 	private SVBar svBar;
 	private OpacityBar opacityBar;
@@ -43,6 +46,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 	CrtanjeView cv;
 	int value = 0;
+	int EraserStatus = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +82,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		picker.setOnColorChangedListener(this);
 
 		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-		
+
 		updateSetings();
 
 	}
@@ -97,6 +101,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+	    this.menu = menu;
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
@@ -174,6 +179,11 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		MenuItem eraserItem = menu.findItem(R.id.action_eraser);
+		MenuItem brushSettingsItem = menu.findItem(R.id.action_drawing_options);
+
+		
 		switch (item.getItemId()) {
 		case R.id.action_save:
 			snimi();
@@ -191,13 +201,23 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 			return true;
 
 		case R.id.action_eraser:
-			CrtanjeView.boja.setColor(Color.WHITE);
-			CrtanjeView.putanja = new mojaPutanja(new Paint(CrtanjeView.boja));
-			CrtanjeView.paths.add(CrtanjeView.putanja);
-			return true;
-			// case R.id.action_size:
-			// dijalogZaDebljinu();
-			// return true;
+			if (EraserStatus == 0) {
+				CrtanjeView.boja.setColor(Color.WHITE);
+				CrtanjeView.putanja = new mojaPutanja(new Paint(
+						CrtanjeView.boja));
+				CrtanjeView.paths.add(CrtanjeView.putanja);
+				eraserItem.setIcon(R.drawable.ic_eraser_selected);
+				brushSettingsItem.setIcon(R.drawable.ic_brush_settings_disabled);
+				brushSettingsItem.setEnabled(false);
+				EraserStatus = 1;
+			} else if (EraserStatus == 1) {
+				eraserItem.setIcon(R.drawable.ic_eraser);
+				brushSettingsItem.setIcon(R.drawable.ic_brush_settings);
+				brushSettingsItem.setEnabled(true);
+				updateSetings();
+				EraserStatus = 0;
+			}
+			
 		default:
 			return false;
 		}
