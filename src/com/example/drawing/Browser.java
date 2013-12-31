@@ -63,6 +63,7 @@ public class Browser extends ListActivity {
 			LoadaniCrtez = Bitmap.createBitmap(10, 10, conf);
 			LoadaniCrtez.recycle();
 			Intent myIntent = new Intent(Browser.this, MainActivity.class);
+			myIntent.putExtra("Drawing Name", "New Drawing");
 			Browser.this.startActivity(myIntent);
 			return true;
 		default:
@@ -81,11 +82,13 @@ public class Browser extends ListActivity {
 			String imeFajla = file.getName().toString();
 			String ekstenzijaFajla = imeFajla.substring(
 					(imeFajla.lastIndexOf(".") + 1), imeFajla.length());
+			String NameWithoutExtension = imeFajla.split("\\.")[0];
 
 			if (file.isFile() && ekstenzijaFajla.equals("png")) {
 					//AKO JE FAJL PNG
 				LoadaniCrtez = BitmapFactory.decodeFile(file.getAbsolutePath());
 				Intent myIntent = new Intent(Browser.this, MainActivity.class);
+				myIntent.putExtra("Drawing Name", NameWithoutExtension);
 				Browser.this.startActivity(myIntent);
 		}
 	}
