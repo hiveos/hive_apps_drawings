@@ -48,5 +48,6 @@ gen/
 .classpath*
 proguard-project*
 project.properties*
+lint.xml
 
 
