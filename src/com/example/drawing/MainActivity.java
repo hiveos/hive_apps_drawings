@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Bitmap.CompressFormat;
@@ -14,8 +15,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.ColorPicker.OnColorChangedListener;
@@ -43,6 +45,8 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 	private Button button;
 	private TextView text;
 	public int color;
+
+	String saveResult;
 
 	CrtanjeView cv;
 	int value = 0;
@@ -83,6 +87,19 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
+		LayoutInflater inflator = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View CustomActionBarView = inflator.inflate(R.layout.save, null);
+
+		EditText ActionBarTitle = (EditText) CustomActionBarView
+				.findViewById(R.id.action_bar_title);
+		ActionBarTitle.setText("New Drawing");
+		ActionBarTitle.requestFocus();
+
+		getActionBar().setDisplayShowCustomEnabled(true);
+		getActionBar().setDisplayShowTitleEnabled(false);
+		getActionBar().setCustomView(CustomActionBarView);
+
 		updateSetings();
 
 	}
@@ -101,54 +118,53 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    this.menu = menu;
+		this.menu = menu;
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
-	private void snimi() {
-		int brojCrteza = new File(Environment.getExternalStorageDirectory()
-				+ "/HIVE/Drawings").listFiles().length;
-		String imeCrteza = "Drawing" + brojCrteza + ".png";
+	private void saveDrawing() {
+
 		File gdjeSnimiti = new File(Environment.getExternalStorageDirectory()
 				+ "/HIVE/Drawings/");
 		if (!gdjeSnimiti.exists()) {
 			gdjeSnimiti.mkdirs();
 		}
 
-		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		final EditText input = new EditText(this);
-		input.setText(imeCrteza);
-		alert.setTitle("Pick a name for your drawing:");
-		alert.setView(input);
-		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				String value = input.getText().toString().trim();
-				File crtez = new File(Environment.getExternalStorageDirectory()
-						+ "/HIVE/Drawings/" + value);
-				FileOutputStream ostream;
-				try {
-					crtez.createNewFile();
-					ostream = new FileOutputStream(crtez);
-					CrtanjeView.MyBitmap.compress(CompressFormat.PNG, 100,
-							ostream);
-					ostream.flush();
-					ostream.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				cv.mijenjan = false;
+		View CustomActionBarView = getActionBar().getCustomView();
+		EditText ActionBarTitle = (EditText) CustomActionBarView
+				.findViewById(R.id.action_bar_title);
+
+		String value = ActionBarTitle.getText().toString().trim();
+
+		File FileToSave = new File(Environment.getExternalStorageDirectory()
+				+ "/HIVE/Drawings/" + value + ".png");
+
+		if (FileToSave.exists()) {
+			Toast.makeText(this, R.string.error_file_exists, Toast.LENGTH_LONG)
+					.show();
+			saveResult = "failed";
+
+		} else {
+			FileOutputStream ostream;
+
+			try {
+				FileToSave.createNewFile();
+				ostream = new FileOutputStream(FileToSave);
+				CrtanjeView.MyBitmap.compress(CompressFormat.PNG, 100, ostream);
+				ostream.flush();
+				ostream.close();
+				
+				Toast.makeText(this, R.string.notif_file_saved, Toast.LENGTH_LONG)
+				.show();
+				saveResult = "saved";
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		});
+			cv.mijenjan = false;
+			
 
-		alert.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						dialog.cancel();
-					}
-				});
-		alert.show();
-
+		}
 	}
 
 	@Override
@@ -161,7 +177,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-									snimi();
+									saveDrawing();
 									// MainActivity.this.finish();
 								}
 							})
@@ -179,14 +195,13 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
+
 		MenuItem eraserItem = menu.findItem(R.id.action_eraser);
 		MenuItem brushSettingsItem = menu.findItem(R.id.action_drawing_options);
 
-		
 		switch (item.getItemId()) {
 		case R.id.action_save:
-			snimi();
+			saveDrawing();
 			return true;
 		case R.id.action_clear:
 			cv.ocistiFunkcija();
@@ -207,7 +222,8 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 						CrtanjeView.boja));
 				CrtanjeView.paths.add(CrtanjeView.putanja);
 				eraserItem.setIcon(R.drawable.ic_eraser_selected);
-				brushSettingsItem.setIcon(R.drawable.ic_brush_settings_disabled);
+				brushSettingsItem
+						.setIcon(R.drawable.ic_brush_settings_disabled);
 				brushSettingsItem.setEnabled(false);
 				EraserStatus = 1;
 			} else if (EraserStatus == 1) {
@@ -217,7 +233,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				updateSetings();
 				EraserStatus = 0;
 			}
-			
+
 		default:
 			return false;
 		}

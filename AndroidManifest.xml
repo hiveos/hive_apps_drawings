@@ -26,7 +26,8 @@
         </activity>
         <activity
             android:name="com.example.drawing.MainActivity"
-            android:label="@string/title_activity_pickcolor" >
+            android:label="@string/title_activity_pickcolor"
+            android:windowSoftInputMode="stateVisible" >
         </activity>
         <activity
             android:name="com.example.drawing.Pickcolor"

@@ -92,4 +92,9 @@
         <item name="android:thumb">@drawable/drawings_scrubber_control_selector_holo_light</item>
     </style>
 
+    <style name="Theme.Drawings.AcytionBar.EditText" parent="android:Widget.Holo.EditText">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:cursorVisible">true</item>
+    </style>
 </resources>

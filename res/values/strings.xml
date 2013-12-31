@@ -7,5 +7,10 @@
     <string name="drawer_open">Slider Menu Opened</string>
     <string name="drawer_close">Slider Menu Closed</string>
     <string name="brush_settings">Brush Settings</string>
+    <string name="error_file_exists">Another drawing with the same name exists. Please choose a different name</string>
+    <string name="notif_file_saved">Drawing successfully saved</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">OK</string>
 
 </resources>
