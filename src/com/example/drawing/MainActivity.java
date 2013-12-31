@@ -239,55 +239,6 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		}
 	}
 
-	public void dijalogZaDebljinu() {
-		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle("Brush size");
-		final TextView text = new TextView(this);
-		text.setText("Hello Android");
-		text.setPadding(10, 10, 10, 10);
-		LinearLayout linear = new LinearLayout(this);
-		linear.setOrientation(1);
-		SeekBar seek = new SeekBar(this);
-		linear.addView(seek);
-		linear.addView(text);
-		alert.setView(linear);
-
-		seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-			public void onStopTrackingTouch(SeekBar bar) {
-				value = bar.getProgress(); // the value of the seekBar progress
-			}
-
-			public void onStartTrackingTouch(SeekBar bar) {
-			}
-
-			public void onProgressChanged(SeekBar bar, int paramInt,
-					boolean paramBoolean) {
-				value = paramInt;
-				text.setText("" + paramInt + "%"); // here in textView the
-													// percent will be shown
-			}
-		});
-
-		alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				CrtanjeView.boja.setStrokeWidth((float) value);
-				CrtanjeView.putanja = new mojaPutanja(new Paint(
-						CrtanjeView.boja));
-				CrtanjeView.paths.add(CrtanjeView.putanja);
-				dialog.dismiss();
-			}
-		});
-
-		alert.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-					}
-				});
-
-		alert.show();
-	}
-
 	@Override
 	public void onColorChanged(int color) {
 		// TODO Auto-generated method stub
