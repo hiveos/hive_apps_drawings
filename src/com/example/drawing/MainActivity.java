@@ -59,7 +59,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		cv = (CrtanjeView) findViewById(R.id.view1);
 		
 		SeekBar sizeBar = (SeekBar) findViewById(R.id.sbDebljina);
-		sizeBar.setProgress(10);
+		sizeBar.setProgress(3);
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
