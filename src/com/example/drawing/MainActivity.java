@@ -6,25 +6,40 @@ import java.io.FileOutputStream;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.ColorPicker.OnColorChangedListener;
+import com.larswerkman.holocolorpicker.OpacityBar;
+import com.larswerkman.holocolorpicker.SVBar;
 
 public class MainActivity extends Activity implements OnColorChangedListener {
+
+	private DrawerLayout mDrawerLayout;
+	private ActionBarDrawerToggle mDrawerToggle;
+
+	private ColorPicker picker;
+	private SVBar svBar;
+	private OpacityBar opacityBar;
+	private Button button;
+	private TextView text;
+	public int color;
 
 	CrtanjeView cv;
 	int value = 0;
@@ -35,11 +50,53 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		setContentView(R.layout.activity_main);
 		cv = (CrtanjeView) findViewById(R.id.view1);
 
+		SeekBar sizeBar = (SeekBar) findViewById(R.id.sbDebljina);
+		sizeBar.setProgress(10);
+
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+				R.drawable.ic_navigation_drawer, R.string.drawer_open,
+				R.string.drawer_close) {
+
+			public void onDrawerClosed(View view) {
+				getActionBar().setTitle("");
+				updateSetings();
+			}
+
+			public void onDrawerOpened(View drawerView) {
+				getActionBar().setTitle(R.string.brush_settings);
+			}
+		};
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+		picker = (ColorPicker) findViewById(R.id.picker);
+		svBar = (SVBar) findViewById(R.id.svbar);
+		opacityBar = (OpacityBar) findViewById(R.id.opacitybar);
+
+		picker.addSVBar(svBar);
+		picker.addOpacityBar(opacityBar);
+		picker.setOnColorChangedListener(this);
+
+		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+		
+		updateSetings();
+
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		mDrawerToggle.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
@@ -47,43 +104,45 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 	private void snimi() {
 		int brojCrteza = new File(Environment.getExternalStorageDirectory()
 				+ "/HIVE/Drawings").listFiles().length;
-		String imeCrteza="Drawing"+brojCrteza+".png";
+		String imeCrteza = "Drawing" + brojCrteza + ".png";
 		File gdjeSnimiti = new File(Environment.getExternalStorageDirectory()
 				+ "/HIVE/Drawings/");
 		if (!gdjeSnimiti.exists()) {
 			gdjeSnimiti.mkdirs();
 		}
-		
-		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-	    final EditText input = new EditText(this);
-	    input.setText(imeCrteza);
-	    alert.setTitle("Pick a name for your drawing:");
-	    alert.setView(input);
-	    alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int whichButton) {
-	            String value = input.getText().toString().trim();
-	            File crtez = new File(Environment.getExternalStorageDirectory()
-	    				+ "/HIVE/Drawings/"+value);
-	            FileOutputStream ostream;
-	    		try {
-	    			crtez.createNewFile();
-	    			ostream = new FileOutputStream(crtez);
-	    			CrtanjeView.MyBitmap.compress(CompressFormat.PNG, 100, ostream);
-	    			ostream.flush();
-	    			ostream.close();
-	    		} catch (Exception e) {
-	    			e.printStackTrace();
-	    		}
-	    		cv.mijenjan = false;
-	        }
-	    });
 
-	    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int whichButton) {
-	            dialog.cancel();
-	        }
-	    });
-	    alert.show();
+		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		final EditText input = new EditText(this);
+		input.setText(imeCrteza);
+		alert.setTitle("Pick a name for your drawing:");
+		alert.setView(input);
+		alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				String value = input.getText().toString().trim();
+				File crtez = new File(Environment.getExternalStorageDirectory()
+						+ "/HIVE/Drawings/" + value);
+				FileOutputStream ostream;
+				try {
+					crtez.createNewFile();
+					ostream = new FileOutputStream(crtez);
+					CrtanjeView.MyBitmap.compress(CompressFormat.PNG, 100,
+							ostream);
+					ostream.flush();
+					ostream.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				cv.mijenjan = false;
+			}
+		});
+
+		alert.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						dialog.cancel();
+					}
+				});
+		alert.show();
 
 	}
 
@@ -98,7 +157,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 								public void onClick(DialogInterface dialog,
 										int id) {
 									snimi();
-									//MainActivity.this.finish();
+									// MainActivity.this.finish();
 								}
 							})
 					.setNegativeButton("No",
@@ -115,7 +174,6 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 		case R.id.action_save:
 			snimi();
@@ -123,17 +181,23 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		case R.id.action_clear:
 			cv.ocistiFunkcija();
 			return true;
-		case R.id.action_color:
-			dijalogZaBoju();
+		case R.id.action_drawing_options:
+			if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
+				closeDrawer();
+				updateSetings();
+			} else {
+				openDrawer();
+			}
 			return true;
+
 		case R.id.action_eraser:
 			CrtanjeView.boja.setColor(Color.WHITE);
 			CrtanjeView.putanja = new mojaPutanja(new Paint(CrtanjeView.boja));
 			CrtanjeView.paths.add(CrtanjeView.putanja);
 			return true;
-		case R.id.action_size:
-			dijalogZaDebljinu();
-			return true;
+			// case R.id.action_size:
+			// dijalogZaDebljinu();
+			// return true;
 		default:
 			return false;
 		}
@@ -188,16 +252,27 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		alert.show();
 	}
 
-	public void dijalogZaBoju() {
-		Intent myIntent = new Intent(MainActivity.this, Pickcolor.class);
-		MainActivity.this.startActivity(myIntent);
-
-	}
-
 	@Override
 	public void onColorChanged(int color) {
 		// TODO Auto-generated method stub
 
 	}
 
+	public void closeDrawer() {
+		mDrawerLayout.closeDrawer(Gravity.START);
+	}
+
+	public void openDrawer() {
+		mDrawerLayout.openDrawer(Gravity.START);
+	}
+
+	public void updateSetings() {
+		SeekBar sizeBar = (SeekBar) findViewById(R.id.sbDebljina);
+		color = picker.getColor();
+		picker.setOldCenterColor(color);
+		CrtanjeView.boja.setColor(color);
+		CrtanjeView.putanja = new mojaPutanja(new Paint(CrtanjeView.boja));
+		CrtanjeView.paths.add(CrtanjeView.putanja);
+		CrtanjeView.boja.setStrokeWidth(sizeBar.getProgress());
+	}
 }

@@ -3,7 +3,9 @@
 
     <string name="app_name">Drawing</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
     <string name="title_activity_pickcolor">Pickcolor</string>
+    <string name="drawer_open">Slider Menu Opened</string>
+    <string name="drawer_close">Slider Menu Closed</string>
+    <string name="brush_settings">Brush Settings</string>
 
 </resources>

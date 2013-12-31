@@ -17,7 +17,7 @@ import android.view.View;
 public class CrtanjeView extends View {
 
 	public static Paint boja;
-	public Boolean mijenjan=false;
+	public Boolean mijenjan = false;
 	public static mojaPutanja putanja;
 	private Paint krugBoja;
 	private Path krugPutanja;
@@ -45,22 +45,23 @@ public class CrtanjeView extends View {
 		krugPutanja = new Path();
 
 	}
-	public void osvjezi()
-	{
+
+	public void osvjezi() {
 		postInvalidate();
 	}
-	
+
 	public void ocistiFunkcija() {
-		//Klikom na erase button, poziva se ocistiFunkcija koja brise trenutne pathove na
-		//canvasu
-		
+		// Klikom na erase button, poziva se ocistiFunkcija koja brise trenutne
+		// pathove na
+		// canvasu
+
 		Log.d("hepek", "pozvano");
 		for (mojaPutanja p : paths) {
 			p.reset();
 		}
 		mCanvas.drawColor(Color.WHITE);
 		Browser.LoadaniCrtez.recycle();
-		mijenjan=true;
+		mijenjan = true;
 		postInvalidate();
 	}
 
@@ -95,9 +96,9 @@ public class CrtanjeView extends View {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		if(!Browser.LoadaniCrtez.isRecycled()){
-		canvas.drawBitmap(Browser.LoadaniCrtez, 0, 0, null);
-		mCanvas.drawBitmap(Browser.LoadaniCrtez, 0, 0, null);
+		if (!Browser.LoadaniCrtez.isRecycled()) {
+			canvas.drawBitmap(Browser.LoadaniCrtez, 0, 0, null);
+			mCanvas.drawBitmap(Browser.LoadaniCrtez, 0, 0, null);
 		}
 		for (mojaPutanja p : paths) {
 			canvas.drawPath(p, p.bojaPutanje);
@@ -112,7 +113,7 @@ public class CrtanjeView extends View {
 
 		float tackaX = e.getX();
 		float tackaY = e.getY();
-		mijenjan=true;
+		mijenjan = true;
 
 		switch (e.getAction()) {
 		case MotionEvent.ACTION_DOWN:
