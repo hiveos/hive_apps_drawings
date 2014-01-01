@@ -32,6 +32,14 @@ public class Browser extends ListActivity {
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		setContentView(R.layout.activity_browser);
+		
+	}
+	
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
 		if (!Lokacija.exists())
 			Lokacija.mkdirs();
 		getFiles(new File(Environment.getExternalStorageDirectory()
@@ -51,6 +59,9 @@ public class Browser extends ListActivity {
 			e.printStackTrace();
 		}
 	}
+
+
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

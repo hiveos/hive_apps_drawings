@@ -107,6 +107,16 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		updateSetings();
 
 	}
+	
+	
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
+
+
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
