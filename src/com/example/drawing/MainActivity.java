@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -57,7 +58,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		cv = (CrtanjeView) findViewById(R.id.view1);
-		
+
 		final SeekBar sizeBar = (SeekBar) findViewById(R.id.sbDebljina);
 		sizeBar.setProgress(3);
 
@@ -71,17 +72,19 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				getActionBar().setTitle("");
 				updateSetings();
 				enableEraser(menu.findItem(R.id.action_eraser));
-				menu.findItem(R.id.action_drawing_options).setIcon(R.drawable.ic_brush_settings);
+				menu.findItem(R.id.action_drawing_options).setIcon(
+						R.drawable.ic_brush_settings);
 
 			}
 
 			public void onDrawerOpened(View drawerView) {
 				getActionBar().setTitle(R.string.brush_settings);
 				disableEraser(menu.findItem(R.id.action_eraser));
-				menu.findItem(R.id.action_drawing_options).setIcon(R.drawable.ic_brush_settings_selected);
+				menu.findItem(R.id.action_drawing_options).setIcon(
+						R.drawable.ic_brush_settings_selected);
 			}
 		};
-		
+
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 		picker = (ColorPicker) findViewById(R.id.picker);
@@ -94,7 +97,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 		Intent i = getIntent();
 		String drawingName = i.getStringExtra("Drawing Name");
-		
+
 		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
 		LayoutInflater inflator = (LayoutInflater) this
@@ -114,15 +117,11 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 	}
 
-	
-
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 	}
-
-
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -192,7 +191,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-			saveResult = "failed";
+									saveResult = "failed";
 								}
 							}).show();
 
@@ -212,7 +211,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				e.printStackTrace();
 			}
 			cv.mijenjan = false;
-			
+
 		}
 	}
 
@@ -252,10 +251,14 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		switch (item.getItemId()) {
 		case R.id.action_save:
 			saveDrawing();
+			hideIME();
 			return true;
+
 		case R.id.action_clear:
 			cv.ocistiFunkcija();
+			hideIME();
 			return true;
+
 		case R.id.action_drawing_options:
 			if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
 				closeDrawer();
@@ -268,6 +271,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				brushSettingsItem
 						.setIcon(R.drawable.ic_brush_settings_selected);
 			}
+			hideIME();
 			return true;
 
 		case R.id.action_eraser:
@@ -288,7 +292,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				updateSetings();
 				EraserStatus = 0;
 			}
-
+			hideIME();
 		default:
 			return false;
 		}
@@ -316,6 +320,18 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 	public void disableEraser(MenuItem item) {
 		item.setIcon(R.drawable.ic_eraser_disabled);
 		item.setEnabled(false);
+	}
+
+	public void hideIME() {
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+		if (imm.isAcceptingText()) {
+			imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+		}
+		
+		cv.setFocusable(true);
+		cv.setFocusableInTouchMode(true);
+		cv.requestFocus();
 	}
 
 	public void updateSetings() {
