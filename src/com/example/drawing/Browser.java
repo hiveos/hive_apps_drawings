@@ -57,33 +57,9 @@ public class Browser extends Activity {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 
-				Log.d("taG", position + "");
-				Log.d("TAGGGG", listFile[position].getAbsolutePath() + "");
-				Log.d("TAGGGG", f.get(position) + "");
-
 				LoadaniCrtez = BitmapFactory.decodeFile(listFile[position]
 						.getAbsolutePath());
 
-				File FileToSave = new File(Environment
-						.getExternalStorageDirectory()
-						+ "/HIVE/temp/"
-						+ "test"
-						+ ".png");
-				FileOutputStream ostream;
-
-				try {
-					FileToSave.createNewFile();
-					ostream = new FileOutputStream(FileToSave);
-					CrtanjeView.MyBitmap.compress(CompressFormat.PNG, 100,
-							ostream);
-					ostream.flush();
-					ostream.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-				if (LoadaniCrtez == null)
-					Log.d("nesto", "NULL JE");
 				Intent i = new Intent(getApplicationContext(),
 						MainActivity.class);
 				i.putExtra("Drawing Name", fileNames.get(position));
