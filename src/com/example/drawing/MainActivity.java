@@ -57,7 +57,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		cv = (CrtanjeView) findViewById(R.id.view1);
-		
+
 		SeekBar sizeBar = (SeekBar) findViewById(R.id.sbDebljina);
 		sizeBar.setProgress(3);
 
@@ -75,7 +75,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				getActionBar().setTitle(R.string.brush_settings);
 			}
 		};
-		
+
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 		picker = (ColorPicker) findViewById(R.id.picker);
@@ -88,7 +88,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 		Intent i = getIntent();
 		String drawingName = i.getStringExtra("Drawing Name");
-		
+
 		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
 		LayoutInflater inflator = (LayoutInflater) this
@@ -141,13 +141,44 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 		String value = ActionBarTitle.getText().toString().trim();
 
-		File FileToSave = new File(Environment.getExternalStorageDirectory()
-				+ "/HIVE/Drawings/" + value + ".png");
+		final File FileToSave = new File(
+				Environment.getExternalStorageDirectory() + "/HIVE/Drawings/"
+						+ value + ".png");
 
 		if (FileToSave.exists()) {
-			Toast.makeText(this, R.string.error_file_exists, Toast.LENGTH_LONG)
-					.show();
-			saveResult = "failed";
+			new AlertDialog.Builder(this)
+					.setMessage(
+							"Are you sure that you want to overwrite existing file?")
+					.setCancelable(true)
+					.setPositiveButton("Yes",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									FileOutputStream ostream;
+
+									try {
+										FileToSave.createNewFile();
+										ostream = new FileOutputStream(
+												FileToSave);
+										CrtanjeView.MyBitmap.compress(
+												CompressFormat.PNG, 100,
+												ostream);
+										ostream.flush();
+										ostream.close();
+										saveResult = "saved";
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+									cv.mijenjan = false;
+								}
+							})
+					.setNegativeButton("No",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									saveResult = "failed";
+								}
+							}).show();
 
 		} else {
 			FileOutputStream ostream;
@@ -158,15 +189,13 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				CrtanjeView.MyBitmap.compress(CompressFormat.PNG, 100, ostream);
 				ostream.flush();
 				ostream.close();
-				
-				Toast.makeText(this, R.string.notif_file_saved, Toast.LENGTH_LONG)
-				.show();
+				Toast.makeText(this, R.string.notif_file_saved,
+						Toast.LENGTH_LONG).show();
 				saveResult = "saved";
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			cv.mijenjan = false;
-			
 
 		}
 	}
@@ -189,6 +218,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
+
 									cv.ocistiFunkcija();
 									MainActivity.this.finish();
 								}
@@ -220,7 +250,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				openDrawer();
 				eraserItem.setIcon(R.drawable.ic_eraser_disabled);
 				eraserItem.setEnabled(false);
-				
+
 			}
 			return true;
 
