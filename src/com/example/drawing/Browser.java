@@ -33,10 +33,10 @@ public class Browser extends Activity {
 	private boolean[] thumbnailsselection;
 	private String[] arrPath;
 	private ImageAdapter imageAdapter;
-	ArrayList<String> f = new ArrayList<String>();// list of file paths
+	ArrayList<String> f = new ArrayList<String>();
 	File[] listFile;
-
-	/** Called when the activity is first created. */
+	ArrayList<String> fileNames = new ArrayList<String>();
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -86,6 +86,7 @@ public class Browser extends Activity {
 				Intent i = new Intent(getApplicationContext(),
 						MainActivity.class);
 				i.putExtra("id", position);
+				i.putExtra("Drawing Name", fileNames.get(position));
 				startActivity(i);
 			}
 		});
@@ -129,6 +130,7 @@ public class Browser extends Activity {
 
 			for (File infile : listFile) {
 				f.add(infile.getAbsolutePath());
+				fileNames.add(infile.getName().toString().split("\\.")[0]);
 			}
 		}
 	}
