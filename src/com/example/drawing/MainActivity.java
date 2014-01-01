@@ -46,7 +46,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 	private Button button;
 	private TextView text;
 	public int color;
-	
+
 	Browser BrowserObj;
 
 	String saveResult;
@@ -230,8 +230,12 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 									saveDrawing();
 									if (saveResult.equals("saved")) {
 										goToBrowserActivity();
-									} else if(saveResult.equals("failed")) {
-										Toast.makeText(getApplicationContext(),R.string.error_failed_to_save_drawing, Toast.LENGTH_LONG).show();
+										finish();
+									} else if (saveResult.equals("failed")) {
+										Toast.makeText(
+												getApplicationContext(),
+												R.string.error_failed_to_save_drawing,
+												Toast.LENGTH_LONG).show();
 									}
 								}
 							})
@@ -242,11 +246,13 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 									cv.ocistiFunkcija();
 									goToBrowserActivity();
+									finish();
 								}
 							}).show();
-		} else
+		} else {
 			goToBrowserActivity();
-
+			finish();
+		}
 	}
 
 	private void goToBrowserActivity() {
