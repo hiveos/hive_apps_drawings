@@ -46,6 +46,11 @@ public class Browser extends Activity {
 		imageAdapter = new ImageAdapter();
 		imagegrid.setAdapter(imageAdapter);
 
+		File DrawingsDir = new File(Environment.getExternalStorageDirectory()
+				+ "/HIVE/Drawings");
+		if (!DrawingsDir.exists())
+			DrawingsDir.mkdirs();
+
 		imagegrid.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v,
@@ -54,7 +59,7 @@ public class Browser extends Activity {
 				Log.d("taG", position + "");
 				Log.d("TAGGGG", listFile[position].getAbsolutePath() + "");
 				Log.d("TAGGGG", f.get(position) + "");
-				
+
 				LoadaniCrtez = BitmapFactory.decodeFile(listFile[position]
 						.getAbsolutePath());
 
