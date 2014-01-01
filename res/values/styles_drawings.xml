@@ -20,6 +20,24 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <style name="Theme.Drawings.TransculentSystemBars" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_drawings</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.Drawings</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Drawings</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Drawings</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav.Drawings</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Drawings</item>
+        <item name="android:actionModeBackground">@drawable/cab_background_top_drawings</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_drawings</item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Drawings</item>
+        <item name="android:seekBarStyle">@style/Theme.Drawings.Drawer.SeekBar</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        
+        <!-- Light.DarkActionBar specific -->
+        <item name="android:actionBarWidgetTheme">@style/Theme.Drawings.Widget</item>
+    </style>
+    
     <style name="Theme.Drawings" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_drawings</item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Drawings</item>

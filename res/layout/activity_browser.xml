@@ -4,6 +4,13 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="73dp"
+        android:background="#9933CC"
+        android:orientation="vertical" >
+    </LinearLayout>
+
     <GridView
         android:id="@+id/gridview"
         android:layout_width="fill_parent"
