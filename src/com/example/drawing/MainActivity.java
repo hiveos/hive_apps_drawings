@@ -70,13 +70,14 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				getActionBar().setTitle("");
 				updateSetings();
 				enableEraser(menu.findItem(R.id.action_eraser));
-				
+				menu.findItem(R.id.action_drawing_options).setIcon(R.drawable.ic_brush_settings);
+
 			}
 
 			public void onDrawerOpened(View drawerView) {
 				getActionBar().setTitle(R.string.brush_settings);
 				disableEraser(menu.findItem(R.id.action_eraser));
-
+				menu.findItem(R.id.action_drawing_options).setIcon(R.drawable.ic_brush_settings_selected);
 			}
 		};
 
@@ -218,9 +219,12 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				closeDrawer();
 				updateSetings();
 				enableEraser(eraserItem);
+				brushSettingsItem.setIcon(R.drawable.ic_brush_settings);
 			} else {
 				openDrawer();
 				disableEraser(eraserItem);
+				brushSettingsItem
+						.setIcon(R.drawable.ic_brush_settings_selected);
 			}
 			return true;
 
@@ -261,12 +265,12 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 	public void openDrawer() {
 		mDrawerLayout.openDrawer(Gravity.START);
 	}
-	
+
 	public void enableEraser(MenuItem item) {
 		item.setIcon(R.drawable.ic_eraser);
 		item.setEnabled(true);
 	}
-	
+
 	public void disableEraser(MenuItem item) {
 		item.setIcon(R.drawable.ic_eraser_disabled);
 		item.setEnabled(false);
