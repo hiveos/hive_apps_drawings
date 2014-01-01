@@ -57,7 +57,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		cv = (CrtanjeView) findViewById(R.id.view1);
-		
+
 		SeekBar sizeBar = (SeekBar) findViewById(R.id.sbDebljina);
 		sizeBar.setProgress(3);
 
@@ -80,7 +80,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				menu.findItem(R.id.action_drawing_options).setIcon(R.drawable.ic_brush_settings_selected);
 			}
 		};
-		
+
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 		picker = (ColorPicker) findViewById(R.id.picker);
@@ -93,7 +93,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 		Intent i = getIntent();
 		String drawingName = i.getStringExtra("Drawing Name");
-		
+
 		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
 		LayoutInflater inflator = (LayoutInflater) this
@@ -112,7 +112,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		updateSetings();
 
 	}
-
+	
 	
 
 	@Override
@@ -191,7 +191,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-			saveResult = "failed";
+									saveResult = "failed";
 								}
 							}).show();
 
@@ -204,6 +204,10 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				CrtanjeView.MyBitmap.compress(CompressFormat.PNG, 100, ostream);
 				ostream.flush();
 				ostream.close();
+<<<<<<< HEAD
+
+=======
+>>>>>>> cc8d1c2b1aa46880d1f892f2ffe88ddd6222c21e
 				Toast.makeText(this, R.string.notif_file_saved,
 						Toast.LENGTH_LONG).show();
 				saveResult = "saved";
@@ -211,7 +215,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				e.printStackTrace();
 			}
 			cv.mijenjan = false;
-			
+
 		}
 	}
 
@@ -263,9 +267,15 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				brushSettingsItem.setIcon(R.drawable.ic_brush_settings);
 			} else {
 				openDrawer();
+<<<<<<< HEAD
 				disableEraser(eraserItem);
 				brushSettingsItem
 						.setIcon(R.drawable.ic_brush_settings_selected);
+=======
+				eraserItem.setIcon(R.drawable.ic_eraser_disabled);
+				eraserItem.setEnabled(false);
+
+>>>>>>> cc8d1c2b1aa46880d1f892f2ffe88ddd6222c21e
 			}
 			return true;
 
