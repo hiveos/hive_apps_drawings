@@ -17,7 +17,8 @@
         android:theme="@style/Theme.Drawings" >
         <activity
             android:name="com.example.drawing.Browser"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,11 +28,13 @@
         <activity
             android:name="com.example.drawing.MainActivity"
             android:label="@string/title_activity_pickcolor"
-            android:windowSoftInputMode="stateVisible" >
+            android:windowSoftInputMode="stateVisible"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.drawing.Pickcolor"
-            android:label="@string/title_activity_pickcolor" >
+            android:label="@string/title_activity_pickcolor"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 
