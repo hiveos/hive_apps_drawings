@@ -60,7 +60,7 @@ public class CrtanjeView extends View {
 			p.reset();
 		}
 		mCanvas.drawColor(Color.WHITE);
-		Browser.LoadaniCrtez.recycle();
+		//Browser.LoadaniCrtez.recycle();
 		mijenjan = true;
 		postInvalidate();
 	}
@@ -96,10 +96,10 @@ public class CrtanjeView extends View {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		if (!Browser.LoadaniCrtez.isRecycled()) {
-			canvas.drawBitmap(Browser.LoadaniCrtez, 0, 0, null);
-			mCanvas.drawBitmap(Browser.LoadaniCrtez, 0, 0, null);
-		}
+//		if (!Browser.LoadaniCrtez.isRecycled()) {
+//			canvas.drawBitmap(Browser.LoadaniCrtez, 0, 0, null);
+//			mCanvas.drawBitmap(Browser.LoadaniCrtez, 0, 0, null);
+//		}
 		for (mojaPutanja p : paths) {
 			canvas.drawPath(p, p.bojaPutanje);
 			mCanvas.drawPath(p, p.bojaPutanje);

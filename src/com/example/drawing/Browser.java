@@ -3,65 +3,89 @@ package com.example.drawing;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
-import android.annotation.SuppressLint;
-import android.app.ListActivity;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.graphics.Bitmap.CompressFormat;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-@SuppressLint("NewApi")
-public class Browser extends ListActivity {
+public class Browser extends Activity {
 
-	private List<String> items = null;
-	private File Lokacija = new File(Environment.getExternalStorageDirectory()
-			+ "/HIVE/Drawings/");
 	public static Bitmap LoadaniCrtez;
+	private int count;
+	private Bitmap[] thumbnails;
+	private boolean[] thumbnailsselection;
+	private String[] arrPath;
+	private ImageAdapter imageAdapter;
+	ArrayList<String> f = new ArrayList<String>();// list of file paths
+	File[] listFile;
 
+	/** Called when the activity is first created. */
 	@Override
-	public void onCreate(Bundle icicle) {
-		super.onCreate(icicle);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_browser);
-		
+		getFromSdcard();
+		GridView imagegrid = (GridView) findViewById(R.id.gridview);
+		imageAdapter = new ImageAdapter();
+		imagegrid.setAdapter(imageAdapter);
+
+		imagegrid.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View v,
+					int position, long id) {
+
+				Log.d("taG", position + "");
+				Log.d("TAGGGG", listFile[position].getAbsolutePath() + "");
+				Log.d("TAGGGG", f.get(position) + "");
+				
+				LoadaniCrtez = BitmapFactory.decodeFile(listFile[position]
+						.getAbsolutePath());
+
+				File FileToSave = new File(Environment
+						.getExternalStorageDirectory()
+						+ "/HIVE/temp/"
+						+ "test"
+						+ ".png");
+				FileOutputStream ostream;
+
+				try {
+					FileToSave.createNewFile();
+					ostream = new FileOutputStream(FileToSave);
+					CrtanjeView.MyBitmap.compress(CompressFormat.PNG, 100,
+							ostream);
+					ostream.flush();
+					ostream.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				if (LoadaniCrtez == null)
+					Log.d("nesto", "NULL JE");
+				Intent i = new Intent(getApplicationContext(),
+						MainActivity.class);
+				i.putExtra("id", position);
+				startActivity(i);
+			}
+		});
+
 	}
-	
-	
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		if (!Lokacija.exists())
-			Lokacija.mkdirs();
-		getFiles(new File(Environment.getExternalStorageDirectory()
-				+ "/HIVE/Drawings/").listFiles());
-
-		File nomedia = new File(Environment.getExternalStorageDirectory()
-				+ "/HIVE/Drawings/.nomedia");
-		try {
-			nomedia.createNewFile();
-
-			FileOutputStream ostream;
-			ostream = new FileOutputStream(nomedia);
-			ostream.flush();
-			ostream.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,32 +114,60 @@ public class Browser extends ListActivity {
 		}
 	}
 
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		int selectedRow = (int) id;
+	public void getFromSdcard() {
+		File file = new File(
+				android.os.Environment.getExternalStorageDirectory(),
+				"/HIVE/Drawings");
 
-		File file = new File(items.get(selectedRow));
-		String imeFajla = file.getName().toString();
-		String ekstenzijaFajla = imeFajla.substring(
-				(imeFajla.lastIndexOf(".") + 1), imeFajla.length());
-		String NameWithoutExtension = imeFajla.split("\\.")[0];
+		if (file.isDirectory()) {
+			listFile = file.listFiles();
 
-		if (file.isFile() && ekstenzijaFajla.equals("png")) {
-			// AKO JE FAJL PNG
-			LoadaniCrtez = BitmapFactory.decodeFile(file.getAbsolutePath());
-			Intent myIntent = new Intent(Browser.this, MainActivity.class);
-			myIntent.putExtra("Drawing Name", NameWithoutExtension);
-			Browser.this.startActivity(myIntent);
+			for (File infile : listFile) {
+				f.add(infile.getAbsolutePath());
+			}
 		}
 	}
 
-	private void getFiles(File[] files) {
-		items = new ArrayList<String>();
-		for (File file : files) {
-			items.add(file.getPath());
+	public class ImageAdapter extends BaseAdapter {
+		private LayoutInflater mInflater;
+
+		public ImageAdapter() {
+			mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
-		ArrayAdapter<String> fileList = new ArrayAdapter<String>(this,
-				R.layout.file_list_row, items);
-		setListAdapter(fileList);
+
+		public int getCount() {
+			return f.size();
+		}
+
+		public Object getItem(int position) {
+			return position;
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder holder;
+			if (convertView == null) {
+				holder = new ViewHolder();
+				convertView = mInflater.inflate(R.layout.griditem, null);
+				holder.imageview = (ImageView) convertView
+						.findViewById(R.id.drawingPreview);
+
+				convertView.setTag(holder);
+			} else {
+				holder = (ViewHolder) convertView.getTag();
+			}
+
+			Bitmap myBitmap = BitmapFactory.decodeFile(f.get(position));
+			holder.imageview.setImageBitmap(myBitmap);
+			return convertView;
+		}
+	}
+
+	class ViewHolder {
+		ImageView imageview;
+
 	}
 }
