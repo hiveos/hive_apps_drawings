@@ -57,7 +57,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		cv = (CrtanjeView) findViewById(R.id.view1);
-		
+
 		SeekBar sizeBar = (SeekBar) findViewById(R.id.sbDebljina);
 		sizeBar.setProgress(3);
 
@@ -69,13 +69,17 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 			public void onDrawerClosed(View view) {
 				getActionBar().setTitle("");
 				updateSetings();
+				enableEraser(menu.findItem(R.id.action_eraser));
+				
 			}
 
 			public void onDrawerOpened(View drawerView) {
 				getActionBar().setTitle(R.string.brush_settings);
+				disableEraser(menu.findItem(R.id.action_eraser));
+
 			}
 		};
-		
+
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 		picker = (ColorPicker) findViewById(R.id.picker);
@@ -88,7 +92,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 		Intent i = getIntent();
 		String drawingName = i.getStringExtra("Drawing Name");
-		
+
 		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
 		LayoutInflater inflator = (LayoutInflater) this
@@ -158,15 +162,14 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				CrtanjeView.MyBitmap.compress(CompressFormat.PNG, 100, ostream);
 				ostream.flush();
 				ostream.close();
-				
-				Toast.makeText(this, R.string.notif_file_saved, Toast.LENGTH_LONG)
-				.show();
+
+				Toast.makeText(this, R.string.notif_file_saved,
+						Toast.LENGTH_LONG).show();
 				saveResult = "saved";
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			cv.mijenjan = false;
-			
 
 		}
 	}
@@ -214,13 +217,10 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 			if (mDrawerLayout.isDrawerOpen(Gravity.START)) {
 				closeDrawer();
 				updateSetings();
-				eraserItem.setIcon(R.drawable.ic_eraser);
-				eraserItem.setEnabled(true);
+				enableEraser(eraserItem);
 			} else {
 				openDrawer();
-				eraserItem.setIcon(R.drawable.ic_eraser_disabled);
-				eraserItem.setEnabled(false);
-				
+				disableEraser(eraserItem);
 			}
 			return true;
 
@@ -260,6 +260,16 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 	public void openDrawer() {
 		mDrawerLayout.openDrawer(Gravity.START);
+	}
+	
+	public void enableEraser(MenuItem item) {
+		item.setIcon(R.drawable.ic_eraser);
+		item.setEnabled(true);
+	}
+	
+	public void disableEraser(MenuItem item) {
+		item.setIcon(R.drawable.ic_eraser_disabled);
+		item.setEnabled(false);
 	}
 
 	public void updateSetings() {
