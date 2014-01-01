@@ -5,6 +5,7 @@
     android:background="@drawable/grid_item_bg" >
 
     <LinearLayout
+        android:id="@+id/gridItem"
         android:layout_width="120dp"
         android:layout_height="150dp"
         android:orientation="vertical" >

@@ -46,6 +46,8 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 	private Button button;
 	private TextView text;
 	public int color;
+	
+	Browser BrowserObj;
 
 	String saveResult;
 
@@ -226,7 +228,11 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 								public void onClick(DialogInterface dialog,
 										int id) {
 									saveDrawing();
-									// MainActivity.this.finish();
+									if (saveResult.equals("saved")) {
+										goToBrowserActivity();
+									} else if(saveResult.equals("failed")) {
+										Toast.makeText(getApplicationContext(),R.string.error_failed_to_save_drawing, Toast.LENGTH_LONG).show();
+									}
 								}
 							})
 					.setNegativeButton("No",
@@ -235,11 +241,23 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 										int id) {
 
 									cv.ocistiFunkcija();
-									MainActivity.this.finish();
+									goToBrowserActivity();
 								}
 							}).show();
 		} else
-			MainActivity.this.finish();
+			goToBrowserActivity();
+
+	}
+
+	private void goToBrowserActivity() {
+		Intent goToBrowser = new Intent(this, Browser.class);
+		startActivity(goToBrowser);
+	}
+
+	private void goToBrowserActivityNoAnim() {
+		Intent goToBrowser = new Intent(this, Browser.class);
+		goToBrowser.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		startActivity(goToBrowser);
 	}
 
 	@Override
@@ -328,7 +346,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		if (imm.isAcceptingText()) {
 			imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 		}
-		
+
 		cv.setFocusable(true);
 		cv.setFocusableInTouchMode(true);
 		cv.requestFocus();

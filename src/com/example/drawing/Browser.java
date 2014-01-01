@@ -10,17 +10,24 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
+import android.view.ActionMode;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Browser extends Activity {
 
@@ -29,13 +36,21 @@ public class Browser extends Activity {
 	ArrayList<String> f = new ArrayList<String>();
 	File[] listFile;
 	ArrayList<String> fileNames = new ArrayList<String>();
+	ArrayList<String> fileNamesWithExtentions = new ArrayList<String>();
+
+	View selectedItem;
+
+	private int ItemId;
+	protected Object mActionMode;
+
+	GridView imagegrid;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_browser);
 		getFromSdcard();
-		GridView imagegrid = (GridView) findViewById(R.id.gridview);
+		imagegrid = (GridView) findViewById(R.id.gridview);
 		imageAdapter = new ImageAdapter();
 		imagegrid.setAdapter(imageAdapter);
 
@@ -57,6 +72,17 @@ public class Browser extends Activity {
 				i.putExtra("Drawing Name", fileNames.get(position));
 				startActivity(i);
 			}
+		});
+		imagegrid.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View v,
+					int position, long arg3) {
+				LaunchContextualActionBar(v);
+				ItemId = position;
+				return true;
+			}
+
 		});
 
 	}
@@ -88,6 +114,56 @@ public class Browser extends Activity {
 		}
 	}
 
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.editdrawing, menu);
+	}
+
+	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.editdrawing, menu);
+			selectedItem.setSelected(true);
+			return true;
+		}
+
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+
+			return false;
+		}
+
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.action_deletedrawing: {
+
+				deleteDrawing();
+				mode.finish();
+			}
+				return true;
+
+			default:
+				return false;
+			}
+		}
+
+		public void onDestroyActionMode(ActionMode mode) {
+			selectedItem.setSelected(false);
+			mActionMode = null;
+		}
+	};
+
+	public void showToast(String message) {
+
+		Toast toast = Toast.makeText(getApplicationContext(), message,
+				Toast.LENGTH_SHORT);
+
+		toast.show();
+
+	}
+
 	public void getFromSdcard() {
 		File file = new File(
 				android.os.Environment.getExternalStorageDirectory(),
@@ -99,6 +175,7 @@ public class Browser extends Activity {
 			for (File infile : listFile) {
 				f.add(infile.getAbsolutePath());
 				fileNames.add(infile.getName().toString().split("\\.")[0]);
+				fileNamesWithExtentions.add(infile.getName().toString());
 			}
 		}
 	}
@@ -149,4 +226,26 @@ public class Browser extends Activity {
 		TextView textview;
 
 	}
+
+	public void LaunchContextualActionBar(View v) {
+		selectedItem = v;
+		mActionMode = this.startActionMode(mActionModeCallback);
+	}
+
+	public void deleteDrawing() {
+		File selectedDrawing = new File(
+				Environment.getExternalStorageDirectory() + "/HIVE/Drawings/"
+						+ fileNamesWithExtentions.get(ItemId));
+		Log.d("TAG", ItemId + "");
+		Log.d("TAG", selectedDrawing + "");
+		selectedDrawing.delete();
+		reload();
+	}
+
+	public void reload() {
+		Intent reload = new Intent(this, Browser.class);
+		reload.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		startActivity(reload);
+	}
+
 }
