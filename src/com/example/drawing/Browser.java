@@ -23,6 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Browser extends Activity {
@@ -36,7 +37,7 @@ public class Browser extends Activity {
 	ArrayList<String> f = new ArrayList<String>();
 	File[] listFile;
 	ArrayList<String> fileNames = new ArrayList<String>();
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -85,7 +86,6 @@ public class Browser extends Activity {
 					Log.d("nesto", "NULL JE");
 				Intent i = new Intent(getApplicationContext(),
 						MainActivity.class);
-				i.putExtra("id", position);
 				i.putExtra("Drawing Name", fileNames.get(position));
 				startActivity(i);
 			}
@@ -161,6 +161,8 @@ public class Browser extends Activity {
 				convertView = mInflater.inflate(R.layout.griditem, null);
 				holder.imageview = (ImageView) convertView
 						.findViewById(R.id.drawingPreview);
+				holder.textview = (TextView) convertView
+						.findViewById(R.id.drawingName);
 
 				convertView.setTag(holder);
 			} else {
@@ -169,12 +171,14 @@ public class Browser extends Activity {
 
 			Bitmap myBitmap = BitmapFactory.decodeFile(f.get(position));
 			holder.imageview.setImageBitmap(myBitmap);
+			holder.textview.setText(fileNames.get(position));
 			return convertView;
 		}
 	}
 
 	class ViewHolder {
 		ImageView imageview;
+		TextView textview;
 
 	}
 }
