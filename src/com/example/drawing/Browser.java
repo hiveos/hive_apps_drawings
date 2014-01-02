@@ -49,6 +49,8 @@ public class Browser extends Activity {
 
 	GridView imagegrid;
 
+	int firstTime = 1;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -89,11 +91,15 @@ public class Browser extends Activity {
 
 		});
 
+		firstTime = 0;
+
 	}
 
 	@Override
 	protected void onResume() {
-		reload();
+		if (firstTime == 0) {
+			reload();
+		}
 		super.onResume();
 	}
 
