@@ -1,29 +1,35 @@
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="#9933CC"
+    android:paddingTop="73dp" >
 
-    <RelativeLayout
+    <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#9933CC"
-        android:paddingTop="73dp"
-        tools:context=".MainActivity" >
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:orientation="vertical" >
 
-        <com.example.drawing.CrtanjeView
-            android:id="@+id/view1"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_weight="5"
-            android:background="#ffffff" />
-    </RelativeLayout>
+            android:background="#9933CC"
+            android:paddingTop="73dp"
+            tools:context=".MainActivity" >
 
-    <!-- The navigation drawer -->
+            <com.example.drawing.CrtanjeView
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_weight="5"
+                android:background="#ffffff" />
+        </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/left_drawer"
