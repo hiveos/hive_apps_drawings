@@ -34,7 +34,11 @@ public class Browser extends Activity {
 	public static Bitmap LoadaniCrtez;
 	private ImageAdapter imageAdapter;
 	ArrayList<String> f = new ArrayList<String>();
+	ArrayList<String> f2 = new ArrayList<String>();
 	File[] listFile;
+	File[] listFile2;
+	ArrayList<String> oldFileNames = new ArrayList<String>();
+	ArrayList<String> newFileNames = new ArrayList<String>();
 	ArrayList<String> fileNames = new ArrayList<String>();
 	ArrayList<String> fileNamesWithExtentions = new ArrayList<String>();
 
@@ -85,6 +89,12 @@ public class Browser extends Activity {
 
 		});
 
+	}
+
+	@Override
+	protected void onResume() {
+		reload();
+		super.onResume();
 	}
 
 	@Override
@@ -180,6 +190,25 @@ public class Browser extends Activity {
 		}
 	}
 
+	public void compareNames() {
+
+		File file = new File(
+				android.os.Environment.getExternalStorageDirectory(),
+				"/HIVE/Drawings");
+
+		oldFileNames = fileNames;
+
+		if (file.isDirectory()) {
+			listFile2 = file.listFiles();
+
+			for (File infile : listFile2) {
+				f2.add(infile.getAbsolutePath());
+				newFileNames.add(infile.getName().toString().split("\\.")[0]);
+			}
+		}
+
+	}
+
 	public class ImageAdapter extends BaseAdapter {
 		private LayoutInflater mInflater;
 
@@ -243,9 +272,12 @@ public class Browser extends Activity {
 	}
 
 	public void reload() {
-		Intent reload = new Intent(this, Browser.class);
-		reload.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-		startActivity(reload);
+		compareNames();
+		if (!oldFileNames.equals(newFileNames)) {
+			Intent reload = new Intent(this, Browser.class);
+			reload.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+			finish();
+			startActivity(reload);
+		}
 	}
-
 }

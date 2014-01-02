@@ -229,8 +229,8 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 										int id) {
 									saveDrawing();
 									if (saveResult.equals("saved")) {
-										goToBrowserActivity();
 										finish();
+
 									} else if (saveResult.equals("failed")) {
 										Toast.makeText(
 												getApplicationContext(),
@@ -245,25 +245,13 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 										int id) {
 
 									cv.ocistiFunkcija();
-									goToBrowserActivity();
 									finish();
+
 								}
 							}).show();
 		} else {
-			goToBrowserActivity();
 			finish();
 		}
-	}
-
-	private void goToBrowserActivity() {
-		Intent goToBrowser = new Intent(this, Browser.class);
-		startActivity(goToBrowser);
-	}
-
-	private void goToBrowserActivityNoAnim() {
-		Intent goToBrowser = new Intent(this, Browser.class);
-		goToBrowser.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-		startActivity(goToBrowser);
 	}
 
 	@Override
