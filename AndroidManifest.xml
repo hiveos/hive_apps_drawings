@@ -31,8 +31,7 @@
             android:name="com.example.drawing.MainActivity"
             android:label="@string/title_activity_pickcolor"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Drawings.TransculentStatusBar"
-            android:windowSoftInputMode="stateVisible" >
+            android:theme="@style/Theme.Drawings.TransculentStatusBar" >
         </activity>
         <activity
             android:name="com.example.drawing.Pickcolor"

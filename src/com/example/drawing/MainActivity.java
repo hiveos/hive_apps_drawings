@@ -262,13 +262,24 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 		switch (item.getItemId()) {
 		case R.id.action_save:
-			saveDrawing();
-			hideIME();
+
+			View CustomActionBarView = getActionBar().getCustomView();
+			EditText ActionBarTitle = (EditText) CustomActionBarView
+					.findViewById(R.id.action_bar_title);
+
+			String TitleValue = ActionBarTitle.getText().toString().trim();
+
+			if (TitleValue.equals("New Drawing")) {
+				toggleIME();
+			} else {
+				saveDrawing();
+
+			}
+
 			return true;
 
 		case R.id.action_clear:
 			cv.ocistiFunkcija();
-			hideIME();
 			return true;
 
 		case R.id.action_drawing_options:
@@ -283,7 +294,6 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				brushSettingsItem
 						.setIcon(R.drawable.ic_brush_settings_selected);
 			}
-			hideIME();
 			return true;
 
 		case R.id.action_eraser:
@@ -304,7 +314,6 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				updateSetings();
 				EraserStatus = 0;
 			}
-			hideIME();
 		default:
 			return false;
 		}
@@ -334,16 +343,9 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		item.setEnabled(false);
 	}
 
-	public void hideIME() {
+	public void toggleIME() {
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
-		if (imm.isAcceptingText()) {
-			imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-		}
-
-		cv.setFocusable(true);
-		cv.setFocusableInTouchMode(true);
-		cv.requestFocus();
+		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 	}
 
 	public void updateSetings() {
