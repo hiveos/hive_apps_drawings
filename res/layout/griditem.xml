@@ -2,7 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/grid_item_bg" >
+    android:background="@drawable/grid_item_bg"
+    android:minHeight="150dp"
+    android:minWidth="120dp"
+    android:maxHeight="150dp"
+    android:maxWidth="120dp" >
 
     <LinearLayout
         android:id="@+id/gridItem"
