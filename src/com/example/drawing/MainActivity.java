@@ -58,7 +58,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		setContentView(R.layout.activity_main);
 		cv = (CrtanjeView) findViewById(R.id.view1);
 		
-		SeekBar sizeBar = (SeekBar) findViewById(R.id.sbDebljina);
+		final SeekBar sizeBar = (SeekBar) findViewById(R.id.sbDebljina);
 		sizeBar.setProgress(3);
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -67,6 +67,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				R.string.drawer_close) {
 
 			public void onDrawerClosed(View view) {
+				CrtanjeView.boja.setStrokeWidth(sizeBar.getProgress());
 				getActionBar().setTitle("");
 				updateSetings();
 				enableEraser(menu.findItem(R.id.action_eraser));
