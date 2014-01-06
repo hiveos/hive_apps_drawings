@@ -140,4 +140,6 @@ public class CrtanjeView extends View {
 		postInvalidate();
 		return true;
 	}
+	
+	
 }

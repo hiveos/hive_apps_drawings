@@ -248,8 +248,11 @@ public class Browser extends Activity {
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
+			
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inSampleSize = 2;
 
-			Bitmap myBitmap = BitmapFactory.decodeFile(f.get(position));
+			Bitmap myBitmap = BitmapFactory.decodeFile(f.get(position), options);
 			holder.imageview.setImageBitmap(myBitmap);
 			holder.textview.setText(fileNames.get(position));
 			return convertView;

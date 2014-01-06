@@ -250,6 +250,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 								}
 							}).show();
 		} else {
+			
 			finish();
 		}
 	}
@@ -357,4 +358,15 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		CrtanjeView.paths.add(CrtanjeView.putanja);
 		CrtanjeView.boja.setStrokeWidth(sizeBar.getProgress());
 	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		CrtanjeView.paths.clear();
+		
+	}
+	
+	
+	
 }
