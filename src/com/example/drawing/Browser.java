@@ -1,7 +1,13 @@
 package com.example.drawing;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.SocketException;
 import java.util.ArrayList;
+
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
 
 import android.app.Activity;
 import android.content.Context;
@@ -90,10 +96,8 @@ public class Browser extends Activity {
 			}
 
 		});
-
 		firstTime = 0;
-
-	}
+    }
 
 	@Override
 	protected void onResume() {

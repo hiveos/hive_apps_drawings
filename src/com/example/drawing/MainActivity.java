@@ -52,7 +52,8 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 	String saveResult;
 
 	CrtanjeView cv;
-	int value = 0;
+	public static String value;
+	int Value = 0;
 	int EraserStatus = 0;
 
 	@Override
@@ -156,7 +157,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		EditText ActionBarTitle = (EditText) CustomActionBarView
 				.findViewById(R.id.action_bar_title);
 
-		String value = ActionBarTitle.getText().toString().trim();
+		value = ActionBarTitle.getText().toString().trim();
 
 		final File FileToSave = new File(
 				Environment.getExternalStorageDirectory() + "/HIVE/Drawings/"
@@ -209,12 +210,18 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				Toast.makeText(this, R.string.notif_file_saved,
 						Toast.LENGTH_LONG).show();
 				saveResult = "saved";
+				uploadajNaFTPSliku();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			cv.mijenjan = false;
 
 		}
+	}
+	
+	public void uploadajNaFTPSliku(){
+		//Poziva upload na server
+		new FtpTask().execute();
 	}
 
 	@Override
