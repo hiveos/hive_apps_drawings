@@ -1,4 +1,6 @@
-package com.example.drawing;
+package hive.apps.drawings;
+
+import hive.apps.drawing.R;
 
 import java.io.File;
 import java.io.FileOutputStream;

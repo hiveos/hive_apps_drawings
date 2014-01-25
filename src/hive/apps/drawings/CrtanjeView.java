@@ -1,4 +1,4 @@
-package com.example.drawing;
+package hive.apps.drawings;
 
 import java.util.ArrayList;
 

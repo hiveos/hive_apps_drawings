@@ -1,13 +1,9 @@
-package com.example.drawing;
+package hive.apps.drawings;
+
+import hive.apps.drawing.R;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.SocketException;
 import java.util.ArrayList;
-
-import org.apache.commons.net.ftp.FTP;
-import org.apache.commons.net.ftp.FTPClient;
 
 import android.app.Activity;
 import android.content.Context;
@@ -96,8 +92,10 @@ public class Browser extends Activity {
 			}
 
 		});
+
 		firstTime = 0;
-    }
+
+	}
 
 	@Override
 	protected void onResume() {
@@ -252,11 +250,8 @@ public class Browser extends Activity {
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
-			
-			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inSampleSize = 2;
 
-			Bitmap myBitmap = BitmapFactory.decodeFile(f.get(position), options);
+			Bitmap myBitmap = BitmapFactory.decodeFile(f.get(position));
 			holder.imageview.setImageBitmap(myBitmap);
 			holder.textview.setText(fileNames.get(position));
 			return convertView;
