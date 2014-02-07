@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.Drawings.TransculentSystemBars" >
         <activity
-            android:name="com.example.drawing.Browser"
+            android:name=".Browser"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Drawings.TransculentSystemBars" >
@@ -29,13 +29,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.drawing.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/title_activity_pickcolor"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Drawings.TransculentStatusBar" >
         </activity>
         <activity
-            android:name="com.example.drawing.Pickcolor"
+            android:name=".Pickcolor"
             android:label="@string/title_activity_pickcolor"
             android:screenOrientation="portrait" >
         </activity>

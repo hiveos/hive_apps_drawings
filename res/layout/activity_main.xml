@@ -19,7 +19,7 @@
             android:paddingTop="73dp"
             tools:context=".MainActivity" >
 
-            <com.example.drawing.CrtanjeView
+            <hive.apps.drawings.CrtanjeView
                 android:id="@+id/view1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
