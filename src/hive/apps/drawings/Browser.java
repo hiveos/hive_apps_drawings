@@ -1,13 +1,27 @@
 package hive.apps.drawings;
 
+import hive.apps.drawings.helpers.HiveHelper;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -26,6 +40,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +62,10 @@ public class Browser extends Activity {
 	private int ItemId;
 	protected Object mActionMode;
 
+	String[] mDrawings;
+	ArrayList<String> mDrawingIds = new ArrayList<String>();
+	ArrayList<String> mDrawingNames = new ArrayList<String>();
+
 	GridView imagegrid;
 
 	int firstTime = 1;
@@ -59,6 +78,8 @@ public class Browser extends Activity {
 		imagegrid = (GridView) findViewById(R.id.gridview);
 		imageAdapter = new ImageAdapter();
 		imagegrid.setAdapter(imageAdapter);
+
+		new FetchTask().execute();
 
 		File DrawingsDir = new File(Environment.getExternalStorageDirectory()
 				+ "/HIVE/Drawings");
@@ -286,4 +307,119 @@ public class Browser extends Activity {
 			startActivity(reload);
 		}
 	}
+
+	private boolean isNetworkAvailable() {
+		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager
+				.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+
+	private class FetchTask extends AsyncTask<String, Integer, String> {
+
+		String response;
+		boolean isEmpty = true;
+
+		ArrayList<String> sDrawingIds = new ArrayList<String>();
+
+		@Override
+		protected String doInBackground(String... params) {
+			HiveHelper mHiveHelper = new HiveHelper();
+			String url = getResources().getString(R.string.api_base)
+					+ mHiveHelper.getUniqueId()
+					+ getResources().getString(R.string.api_list_drawing);
+
+			if (isNetworkAvailable()) {
+				try {
+					HttpClient client = new DefaultHttpClient();
+					HttpGet get = new HttpGet(url);
+					HttpResponse responseGet;
+					responseGet = client.execute(get);
+					HttpEntity resEntityGet = responseGet.getEntity();
+
+					if (resEntityGet != null) {
+						response = EntityUtils.toString(resEntityGet);
+					} else {
+
+					}
+
+					extractData();
+				} catch (ClientProtocolException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				Intent mNoNetworkIntent = new Intent();
+				mNoNetworkIntent.setAction("hive.action.General");
+				mNoNetworkIntent.putExtra("do", "ERROR_NO_CONNECTION");
+				sendBroadcast(mNoNetworkIntent);
+				finish();
+			}
+
+			return null;
+		}
+
+		private void extractData() {
+			clearUp();
+
+			if (!response.equals("")) {
+				mDrawings = response.split(";");
+
+				for (int i = 0; i < mDrawings.length; i++) {
+
+					mDrawingIds.add(mDrawings[i].substring(
+							mDrawings[i].indexOf("id=") + 3,
+							mDrawings[i].indexOf(",name")));
+					mDrawingNames.add(mDrawings[i].substring(mDrawings[i]
+							.indexOf("name=") + 5));
+					isEmpty = false;
+				}
+			}
+		}
+
+		private void clearUp() {
+			Browser.this.runOnUiThread(new Runnable() {
+				public void run() {
+					// LinearLayout NoNotebook = (LinearLayout)
+					// findViewById(R.id.no_notebook);
+					// NoNotebook.setVisibility(View.GONE);
+				}
+			});
+			clearArrays();
+		}
+
+		private void clearArrays() {
+			mDrawingNames.clear();
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			if (isNetworkAvailable()) {
+				if (!isEmpty) {
+					addNotebooks();
+				} else {
+					displayNoNotebooks();
+				}
+			}
+			// mPullToRefreshLayout.setRefreshComplete();
+		}
+
+		private void addNotebooks() {
+
+		}
+
+		private void displayNoNotebooks() {
+			Browser.this.runOnUiThread(new Runnable() {
+				public void run() {
+					// LinearLayout NoNotebook = (LinearLayout)
+					// findViewById(R.id.no_notebook);
+					// NoNotebook.setVisibility(View.VISIBLE);
+				}
+			});
+		}
+
+	}
+
 }
