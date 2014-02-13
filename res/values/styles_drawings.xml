@@ -33,11 +33,17 @@
         <item name="android:seekBarStyle">@style/Theme.Drawings.Drawer.SeekBar</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
-        
+        <item name="ptrProgressBarColor">#CCFFFFFF</item>
+        <item name="ptrHeaderTitleTextAppearance">@style/RobotoTextViewStyleLight</item>
+        <item name="ptrProgressBarStyle">inside</item>
+        <item name="ptrPullText">@string/ptr_pull_text</item>
+        <item name="ptrRefreshingText">@string/ptr_refreshing_text</item>
+        <item name="ptrReleaseText">@string/ptr_release_text</item>
+
         <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Drawings.Widget</item>
     </style>
-    
+
     <style name="Theme.Drawings" parent="@android:style/Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_drawings</item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Drawings</item>
@@ -49,7 +55,13 @@
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_drawings</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Drawings</item>
         <item name="android:seekBarStyle">@style/Theme.Drawings.Drawer.SeekBar</item>
-        
+        <item name="ptrProgressBarColor">#CCFFFFFF</item>
+        <item name="ptrHeaderTitleTextAppearance">@style/RobotoTextViewStyleLight</item>
+        <item name="ptrProgressBarStyle">inside</item>
+        <item name="ptrPullText">@string/ptr_pull_text</item>
+        <item name="ptrRefreshingText">@string/ptr_refreshing_text</item>
+        <item name="ptrReleaseText">@string/ptr_release_text</item>
+
         <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Drawings.Widget</item>
     </style>
@@ -67,11 +79,17 @@
         <item name="android:seekBarStyle">@style/Theme.Drawings.Drawer.SeekBar</item>
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:windowTranslucentStatus">true</item>
-        
+        <item name="ptrProgressBarColor">#CCFFFFFF</item>
+        <item name="ptrHeaderTitleTextAppearance">@style/RobotoTextViewStyleLight</item>
+        <item name="ptrProgressBarStyle">inside</item>
+        <item name="ptrPullText">@string/ptr_pull_text</item>
+        <item name="ptrRefreshingText">@string/ptr_refreshing_text</item>
+        <item name="ptrReleaseText">@string/ptr_release_text</item>
+
         <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Drawings.Widget</item>
     </style>
-    
+
     <style name="ActionBar.Solid.Drawings" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@drawable/ab_solid_drawings</item>
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_drawings</item>
@@ -128,10 +146,18 @@
         <item name="android:thumb">@drawable/drawings_scrubber_control_selector_holo_light</item>
     </style>
 
+    <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+
+    <style name="RobotoTextViewStyleLight" parent="android:Widget.TextView">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
     <style name="Theme.Drawings.AcytionBar.EditText" parent="android:Widget.Holo.EditText">
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:cursorVisible">true</item>
     </style>
-    
+
 </resources>

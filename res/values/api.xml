@@ -6,5 +6,7 @@
     <string name="api_delete_drawing">/delete/drawing</string>
     <string name="api_add_drawing">/add/drawing</string>
     <string name="api_edit_drawing">/edit/drawing</string>
+    <string name="api_output_drawing">/output/drawing</string>
+    <string name="api_pull_drawing">/pull/drawing</string>
 
 </resources>

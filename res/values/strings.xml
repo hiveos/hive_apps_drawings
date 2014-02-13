@@ -14,5 +14,8 @@
     <string name="no">No</string>
     <string name="ok">OK</string>
     <string name="contextualmenu_item_delete">Delete</string>
+    <string name="ptr_pull_text">Pull to refresh...</string>
+    <string name="ptr_refreshing_text">Synchronizing drawings...</string>
+    <string name="ptr_release_text">Release to refresh!</string>
 
 </resources>

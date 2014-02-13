@@ -14,6 +14,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -40,11 +43,10 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Browser extends Activity {
+public class Browser extends Activity implements OnRefreshListener {
 
 	public static Bitmap LoadaniCrtez;
 	private ImageAdapter imageAdapter;
@@ -70,16 +72,22 @@ public class Browser extends Activity {
 
 	int firstTime = 1;
 
+	private PullToRefreshLayout mPullToRefreshLayout;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_browser);
+
+		getWindow().setWindowAnimations(0);
+
 		getFromSdcard();
+
 		imagegrid = (GridView) findViewById(R.id.gridview);
 		imageAdapter = new ImageAdapter();
 		imagegrid.setAdapter(imageAdapter);
 
-		new FetchTask().execute();
+		new FetchTask().execute("noreload");
 
 		File DrawingsDir = new File(Environment.getExternalStorageDirectory()
 				+ "/HIVE/Drawings");
@@ -91,13 +99,13 @@ public class Browser extends Activity {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 
-				LoadaniCrtez = BitmapFactory.decodeFile(listFile[position]
-						.getAbsolutePath());
+				// LoadaniCrtez = BitmapFactory.decodeFile(listFile[position]
+				// .getAbsolutePath());
 
-				Intent i = new Intent(getApplicationContext(),
-						MainActivity.class);
-				i.putExtra("Drawing Name", fileNames.get(position));
-				startActivity(i);
+				// Intent i = new Intent(getApplicationContext(),
+				// MainActivity.class);
+				// i.putExtra("Drawing Name", fileNames.get(position));
+				// startActivity(i);
 			}
 		});
 		imagegrid.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -112,15 +120,17 @@ public class Browser extends Activity {
 
 		});
 
+		mPullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
+
+		ActionBarPullToRefresh.from(this).allChildrenArePullable()
+				.listener(this).setup(mPullToRefreshLayout);
+
 		firstTime = 0;
 
 	}
 
 	@Override
 	protected void onResume() {
-		if (firstTime == 0) {
-			reload();
-		}
 		super.onResume();
 	}
 
@@ -299,13 +309,11 @@ public class Browser extends Activity {
 	}
 
 	public void reload() {
-		compareNames();
-		if (!oldFileNames.equals(newFileNames)) {
-			Intent reload = new Intent(this, Browser.class);
-			reload.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-			finish();
-			startActivity(reload);
-		}
+		Intent reload = new Intent(this, Browser.class);
+		reload.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		reload.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		finish();
+		startActivity(reload);
 	}
 
 	private boolean isNetworkAvailable() {
@@ -357,7 +365,7 @@ public class Browser extends Activity {
 				finish();
 			}
 
-			return null;
+			return params[0];
 		}
 
 		private void extractData() {
@@ -397,20 +405,15 @@ public class Browser extends Activity {
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 			if (isNetworkAvailable()) {
-				if (!isEmpty) {
-					addNotebooks();
-				} else {
-					displayNoNotebooks();
-				}
+				new DownloadTask().execute(result);
 			}
-			// mPullToRefreshLayout.setRefreshComplete();
 		}
 
-		private void addNotebooks() {
+		private void addDrawings() {
 
 		}
 
-		private void displayNoNotebooks() {
+		private void displayNoDrawings() {
 			Browser.this.runOnUiThread(new Runnable() {
 				public void run() {
 					// LinearLayout NoNotebook = (LinearLayout)
@@ -420,6 +423,58 @@ public class Browser extends Activity {
 			});
 		}
 
+	}
+
+	private class DownloadTask extends AsyncTask<String, String, String> {
+
+		@Override
+		protected String doInBackground(String... params) {
+			HiveHelper mHiveHelper = new HiveHelper();
+			String url = getResources().getString(R.string.api_base)
+					+ mHiveHelper.getUniqueId()
+					+ getResources().getString(R.string.api_output_drawing);
+
+			File file = null;
+
+			for (int i = 0; i <= mDrawings.length; i++) {
+
+				try {
+					HttpRequest request = HttpRequest.post(url).send(
+							"item=" + mDrawingIds.get(i) + "&page=1");
+
+					if (request.ok()) {
+						file = new File(
+								Environment.getExternalStorageDirectory()
+										+ "/HIVE/Drawings/"
+										+ mDrawingNames.get(i) + ".png");
+						request.receive(file);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			return params[0];
+		}
+
+		@Override
+		protected void onPostExecute(final String reload) {
+			Browser.this.runOnUiThread(new Runnable() {
+				public void run() {
+					GridView mGridView = (GridView) findViewById(R.id.gridview);
+					mGridView.setVisibility(View.VISIBLE);
+					if (reload.equals("reload")) {
+						reload();
+					}
+					mPullToRefreshLayout.setRefreshComplete();
+				}
+			});
+		}
+
+	}
+
+	@Override
+	public void onRefreshStarted(View view) {
+		new FetchTask().execute("reload");
 	}
 
 }
