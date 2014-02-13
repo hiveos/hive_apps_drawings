@@ -87,8 +87,6 @@ public class Browser extends Activity implements OnRefreshListener {
 		imageAdapter = new ImageAdapter();
 		imagegrid.setAdapter(imageAdapter);
 
-		new FetchTask().execute("noreload");
-
 		File DrawingsDir = new File(Environment.getExternalStorageDirectory()
 				+ "/HIVE/Drawings");
 		if (!DrawingsDir.exists())
@@ -124,6 +122,9 @@ public class Browser extends Activity implements OnRefreshListener {
 
 		ActionBarPullToRefresh.from(this).allChildrenArePullable()
 				.listener(this).setup(mPullToRefreshLayout);
+		
+		new FetchTask().execute("noreload");
+		mPullToRefreshLayout.setRefreshing(true);
 
 		firstTime = 0;
 
