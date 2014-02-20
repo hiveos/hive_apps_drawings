@@ -97,13 +97,13 @@ public class Browser extends Activity implements OnRefreshListener {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 
-				 LoadaniCrtez = BitmapFactory.decodeFile(listFile[position]
-				 .getAbsolutePath());
+				LoadaniCrtez = BitmapFactory.decodeFile(listFile[position]
+						.getAbsolutePath());
 
-				 Intent i = new Intent(getApplicationContext(),
-				 MainActivity.class);
-				 i.putExtra("Drawing Name", fileNames.get(position));
-				 startActivity(i);
+				Intent i = new Intent(getApplicationContext(),
+						MainActivity.class);
+				i.putExtra("Drawing Name", fileNames.get(position));
+				startActivity(i);
 			}
 		});
 		imagegrid.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -122,9 +122,14 @@ public class Browser extends Activity implements OnRefreshListener {
 
 		ActionBarPullToRefresh.from(this).allChildrenArePullable()
 				.listener(this).setup(mPullToRefreshLayout);
-		
+
 		new FetchTask().execute("noreload");
 		mPullToRefreshLayout.setRefreshing(true);
+
+		getActionBar().setIcon(null);
+		getActionBar().setDisplayUseLogoEnabled(false);
+		getActionBar().setTitle(
+				getResources().getString(R.string.app_name).toUpperCase());
 
 		firstTime = 0;
 

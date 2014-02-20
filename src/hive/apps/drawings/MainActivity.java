@@ -210,18 +210,12 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				Toast.makeText(this, R.string.notif_file_saved,
 						Toast.LENGTH_LONG).show();
 				saveResult = "saved";
-				uploadajNaFTPSliku();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			cv.mijenjan = false;
 
 		}
-	}
-	
-	public void uploadajNaFTPSliku(){
-		//Poziva upload na server
-		new FtpTask().execute();
 	}
 
 	@Override
@@ -257,7 +251,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 								}
 							}).show();
 		} else {
-			
+
 			finish();
 		}
 	}
@@ -371,9 +365,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		// TODO Auto-generated method stub
 		super.onPause();
 		CrtanjeView.paths.clear();
-		
+
 	}
-	
-	
-	
+
 }
