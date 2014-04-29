@@ -178,62 +178,23 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				Environment.getExternalStorageDirectory() + "/HIVE/Drawings/"
 						+ drawingId + ".png");
 
-		if (FileToSave.exists()) {
-			new AlertDialog.Builder(this)
-					.setMessage(
-							"Are you sure that you want to overwrite existing file?")
-					.setCancelable(true)
-					.setPositiveButton("Yes",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									FileOutputStream ostream;
+		FileOutputStream ostream;
 
-									try {
-										FileToSave.createNewFile();
-										ostream = new FileOutputStream(
-												FileToSave);
-										CrtanjeView.MyBitmap.compress(
-												CompressFormat.PNG, 100,
-												ostream);
-										ostream.flush();
-										ostream.close();
-                                        new UploadTask().execute();
-										saveResult = "saved";
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-                                    new EditTask().execute(value);
-									cv.mijenjan = false;
-								}
-							})
-					.setNegativeButton("No",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									saveResult = "failed";
-								}
-							}).show();
-
-		} else {
-			FileOutputStream ostream;
-
-			try {
-				FileToSave.createNewFile();
-				ostream = new FileOutputStream(FileToSave);
-				CrtanjeView.MyBitmap.compress(CompressFormat.PNG, 100, ostream);
-				ostream.flush();
-				ostream.close();
-				Toast.makeText(this, R.string.notif_file_saved,
-						Toast.LENGTH_LONG).show();
-                new UploadTask().execute();
-				saveResult = "saved";
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			cv.mijenjan = false;
-
+		try {
+			FileToSave.createNewFile();
+			ostream = new FileOutputStream(FileToSave);
+			CrtanjeView.MyBitmap.compress(CompressFormat.PNG, 100, ostream);
+			ostream.flush();
+			ostream.close();
+            new UploadTask().execute();
+			saveResult = "saved";
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
+        new EditTask().execute(value);
+
+        cv.mijenjan = false;
 	}
 
 	@Override
