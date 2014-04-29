@@ -18,7 +18,9 @@ import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,6 +29,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.ContextMenu;
@@ -41,6 +44,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -97,7 +101,15 @@ public class Browser extends Activity implements OnRefreshListener {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 
-				LoadaniCrtez = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/HIVE/Drawings/" + mDrawingIds.get(position) + ".png");
+                Bitmap drawingToLoad = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/HIVE/Drawings/" + mDrawingIds.get(position) + ".png");
+
+                if (drawingToLoad != null) {
+                    LoadaniCrtez = drawingToLoad;
+                } else {
+                    Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+                    LoadaniCrtez = Bitmap.createBitmap(10, 10, conf);
+                    LoadaniCrtez.recycle();
+                }
 
 				Intent i = new Intent(getApplicationContext(),
 						MainActivity.class);
@@ -152,20 +164,33 @@ public class Browser extends Activity implements OnRefreshListener {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 		case R.id.action_add:
-			File initialDrawing = new File(
-					Environment.getExternalStorageDirectory()
-							+ "/HIVE/Drawings/Drawing0.png");
-			Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-			LoadaniCrtez = Bitmap.createBitmap(10, 10, conf);
-			LoadaniCrtez.recycle();
-			Intent myIntent = new Intent(Browser.this, MainActivity.class);
-			myIntent.putExtra("Drawing Name", "New Drawing");
-			Browser.this.startActivity(myIntent);
+            showAddDialog();
 			return true;
 		default:
 			return false;
 		}
 	}
+
+    public void showAddDialog() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Drawing Name");
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                new AddTask().execute(input.getText().toString());
+            }
+        });
+
+        alert.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Canceled.
+                    }
+                });
+        alert.show();
+    }
 
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
@@ -485,5 +510,16 @@ public class Browser extends Activity implements OnRefreshListener {
 	public void onRefreshStarted(View view) {
 		new FetchTask().execute("reload");
 	}
+
+    private class AddTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String response = HttpRequest.get(getString(R.string.api_base) + new HiveHelper().getUniqueId() + getString(R.string.api_add_drawing)).send("name=" + strings[0]).body();
+            Log.d("RESPONSE", response);
+
+            return null;
+        }
+    }
 
 }
