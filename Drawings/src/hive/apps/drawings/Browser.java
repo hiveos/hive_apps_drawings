@@ -504,7 +504,7 @@ public class Browser extends Activity implements OnRefreshListener {
 
 	@Override
 	public void onRefreshStarted(View view) {
-		new FetchTask().execute("reload");
+		reload();
 	}
 
     private class AddTask extends AsyncTask<String, Void, Void> {
