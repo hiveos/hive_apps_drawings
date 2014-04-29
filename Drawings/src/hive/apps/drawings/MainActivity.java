@@ -198,11 +198,12 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 												ostream);
 										ostream.flush();
 										ostream.close();
+                                        new UploadTask().execute();
 										saveResult = "saved";
 									} catch (Exception e) {
 										e.printStackTrace();
 									}
-                                    new UploadTask().execute();
+                                    new EditTask().execute(value);
 									cv.mijenjan = false;
 								}
 							})
@@ -225,6 +226,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 				ostream.close();
 				Toast.makeText(this, R.string.notif_file_saved,
 						Toast.LENGTH_LONG).show();
+                new UploadTask().execute();
 				saveResult = "saved";
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -514,9 +516,6 @@ public class MainActivity extends Activity implements OnColorChangedListener {
                            "Exception : " + e.getMessage(), e);
                }
 
-           /*String response = HttpRequest.get(getString(R.string.api_base) + new HiveHelper().getUniqueId() + getString(R.string.api_push_drawing) + "/" + drawingId).send("file=" + file).body();
-           Log.d("RESPONSE", response);*/
-
            return null;
        }
 
@@ -528,4 +527,20 @@ public class MainActivity extends Activity implements OnColorChangedListener {
        }
    }
 
+    private class EditTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String response = HttpRequest.get(getString(R.string.api_base) + new HiveHelper().getUniqueId() + getString(R.string.api_edit_drawing)).send("item=" + drawingId + "&name=" + strings[0]).body();
+            Log.d("RESPONSE", response);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Log.i("UPDATE", "Done");
+        }
+    }
 }
