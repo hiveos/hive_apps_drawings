@@ -97,12 +97,12 @@ public class Browser extends Activity implements OnRefreshListener {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
 
-				LoadaniCrtez = BitmapFactory.decodeFile(listFile[position]
-						.getAbsolutePath());
+				LoadaniCrtez = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/HIVE/Drawings/" + mDrawingIds.get(position) + ".png");
 
 				Intent i = new Intent(getApplicationContext(),
 						MainActivity.class);
-				i.putExtra("Drawing Name", fileNames.get(position));
+				i.putExtra("Drawing Name", mDrawingNames.get(position));
+                i.putExtra("Drawing Id", mDrawingIds.get(position));
 				startActivity(i);
 			}
 		});
@@ -260,7 +260,7 @@ public class Browser extends Activity implements OnRefreshListener {
 		}
 
 		public int getCount() {
-			return f.size();
+			return mDrawingIds.size();
 		}
 
 		public Object getItem(int position) {
@@ -272,6 +272,9 @@ public class Browser extends Activity implements OnRefreshListener {
 		}
 
 		public View getView(int position, View convertView, ViewGroup parent) {
+            File fileToLoad = new File(Environment.getExternalStorageDirectory(),
+                    "/HIVE/Drawings/" + mDrawingIds.get(position) + ".png");
+
 			ViewHolder holder;
 			if (convertView == null) {
 				holder = new ViewHolder();
@@ -286,9 +289,9 @@ public class Browser extends Activity implements OnRefreshListener {
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			Bitmap myBitmap = BitmapFactory.decodeFile(f.get(position));
+			Bitmap myBitmap = BitmapFactory.decodeFile(fileToLoad.getAbsolutePath());
 			holder.imageview.setImageBitmap(myBitmap);
-			holder.textview.setText(fileNames.get(position));
+			holder.textview.setText(mDrawingNames.get(position));
 			return convertView;
 		}
 	}
@@ -452,7 +455,7 @@ public class Browser extends Activity implements OnRefreshListener {
 						file = new File(
 								Environment.getExternalStorageDirectory()
 										+ "/HIVE/Drawings/"
-										+ mDrawingNames.get(i) + ".png");
+										+ mDrawingIds.get(i) + ".png");
 						request.receive(file);
 					}
 				} catch (Exception e) {

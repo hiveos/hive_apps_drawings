@@ -1,7 +1,15 @@
 package hive.apps.drawings;
 
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,10 +20,12 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,6 +42,8 @@ import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.ColorPicker.OnColorChangedListener;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
+
+import hive.apps.drawings.helpers.HiveHelper;
 
 public class MainActivity extends Activity implements OnColorChangedListener {
 
@@ -50,6 +62,8 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 	Browser BrowserObj;
 
 	String saveResult;
+
+    String drawingName, drawingId;
 
 	CrtanjeView cv;
 	public static String value;
@@ -99,7 +113,8 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		picker.setOnColorChangedListener(this);
 
 		Intent i = getIntent();
-		String drawingName = i.getStringExtra("Drawing Name");
+		drawingName = i.getStringExtra("Drawing Name");
+		drawingId = i.getStringExtra("Drawing Id");
 
 		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
@@ -161,7 +176,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 
 		final File FileToSave = new File(
 				Environment.getExternalStorageDirectory() + "/HIVE/Drawings/"
-						+ value + ".png");
+						+ drawingId + ".png");
 
 		if (FileToSave.exists()) {
 			new AlertDialog.Builder(this)
@@ -187,6 +202,7 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 									} catch (Exception e) {
 										e.printStackTrace();
 									}
+                                    new UploadTask().execute();
 									cv.mijenjan = false;
 								}
 							})
@@ -367,5 +383,149 @@ public class MainActivity extends Activity implements OnColorChangedListener {
 		CrtanjeView.paths.clear();
 
 	}
+
+   private class UploadTask extends AsyncTask<Void, Void, Void> {
+
+       @Override
+       protected Void doInBackground(Void... voids) {
+           File origfile = new File(Environment.getExternalStorageDirectory(),
+                   "/HIVE/Drawings/" + drawingId + ".png");
+
+           File file = new File(Environment.getExternalStorageDirectory(),
+                   "/HIVE/Zipped_Drawings/" + "page1" + ".png");
+
+           File zipFile = new File(Environment.getExternalStorageDirectory()
+                   + "/HIVE/Zipped_Drawings/" + drawingName + ".zip");
+
+           File zipFiles = new File(Environment.getExternalStorageDirectory()
+                   + "/HIVE/Zipped_Drawings");
+
+           if(!zipFiles.exists()) {
+               zipFiles.mkdirs();
+           }
+
+           origfile.renameTo(file);
+
+           try {
+               byte[] buffer = new byte[1024];
+
+               FileOutputStream fos = new FileOutputStream(zipFile);
+               ZipOutputStream zos = new ZipOutputStream(fos);
+               FileInputStream fis = new FileInputStream(file);
+
+               zos.putNextEntry(new ZipEntry("page1" + ".png"));
+
+               int length;
+
+               while ((length = fis.read(buffer)) > 0) {
+                   zos.write(buffer, 0, length);
+               }
+
+               zos.closeEntry();
+               fis.close();
+               zos.close();
+
+           }
+           catch (IOException ioe) {
+               System.out.println("Error creating zip file" + ioe);
+           }
+
+           Log.d("URL", getString(R.string.api_base) + new HiveHelper().getUniqueId() + getString(R.string.api_push_drawing) + "/" + drawingId);
+
+           String fileName = Environment.getExternalStorageDirectory()
+                   + "/HIVE/Zipped_Drawings/page1.png";
+
+           int serverResponseCode = 0;
+
+           HttpURLConnection conn = null;
+           DataOutputStream dos = null;
+           String lineEnd = "\r\n";
+           String twoHyphens = "--";
+           String boundary = "*****";
+           int bytesRead, bytesAvailable, bufferSize;
+           byte[] buffer;
+           int maxBufferSize = 1 * 1024 * 1024;
+
+               try {
+                   FileInputStream fileInputStream = new FileInputStream(
+                           file);
+                   URL url = new URL(getString(R.string.api_base) + new HiveHelper().getUniqueId() + getString(R.string.api_push_drawing) + "/" + drawingId);
+                   // Open a HTTP connection to the URL
+                   conn = (HttpURLConnection) url.openConnection();
+                   conn.setDoInput(true); // Allow Inputs
+                   conn.setDoOutput(true); // Allow Outputs
+                   conn.setUseCaches(false); // Don't use a Cached Copy
+                   conn.setRequestMethod("POST");
+                   conn.setRequestProperty("Connection", "Keep-Alive");
+                   conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                   conn.setRequestProperty("Content-Type",
+                           "multipart/form-data;boundary=" + boundary);
+                   conn.setRequestProperty("file", fileName);
+
+                   dos = new DataOutputStream(conn.getOutputStream());
+                   dos.writeBytes(twoHyphens + boundary + lineEnd);
+                   dos.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\""
+                           + fileName + "\"" + lineEnd);
+
+                   dos.writeBytes(lineEnd);
+
+                   bytesAvailable = fileInputStream.available();
+
+                   bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                   buffer = new byte[bufferSize];
+                   bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+                   while (bytesRead > 0) {
+
+                       dos.write(buffer, 0, bufferSize);
+                       bytesAvailable = fileInputStream.available();
+                       bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                       bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+                   }
+
+                   dos.writeBytes(lineEnd);
+                   dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+                   serverResponseCode = conn.getResponseCode();
+                   String serverResponseMessage = conn.getResponseMessage();
+
+                   Log.i("uploadFile", "HTTP Response is : "
+                           + serverResponseMessage + ": " + serverResponseCode);
+                   Log.i("response", serverResponseMessage);
+
+                   if (serverResponseCode == 200) {
+
+                       runOnUiThread(new Runnable() {
+                           public void run() {
+                               Log.d("File uploading status:", "Completed");
+                           }
+                       });
+                   }
+                   fileInputStream.close();
+                   dos.flush();
+                   dos.close();
+
+               } catch (MalformedURLException ex) {
+                   ex.printStackTrace();
+                   Log.e("Upload file to server", "error: " + ex.getMessage(), ex);
+               } catch (Exception e) {
+                   Log.e("Upload file to server Exception",
+                           "Exception : " + e.getMessage(), e);
+               }
+
+           /*String response = HttpRequest.get(getString(R.string.api_base) + new HiveHelper().getUniqueId() + getString(R.string.api_push_drawing) + "/" + drawingId).send("file=" + file).body();
+           Log.d("RESPONSE", response);*/
+
+           return null;
+       }
+
+       @Override
+       protected void onPostExecute(Void aVoid) {
+           super.onPostExecute(aVoid);
+           Log.d("TAG", "finished");
+           Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_SHORT).show();
+       }
+   }
 
 }

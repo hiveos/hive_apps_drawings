@@ -8,5 +8,6 @@
     <string name="api_edit_drawing">/edit/drawing</string>
     <string name="api_output_drawing">/output/drawing</string>
     <string name="api_pull_drawing">/pull/drawing</string>
+    <string name="api_push_drawing">/push/drawing</string>
 
 </resources>
