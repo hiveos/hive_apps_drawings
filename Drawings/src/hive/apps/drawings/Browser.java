@@ -180,6 +180,7 @@ public class Browser extends Activity implements OnRefreshListener {
         alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 new AddTask().execute(input.getText().toString());
+                reload();
             }
         });
 
