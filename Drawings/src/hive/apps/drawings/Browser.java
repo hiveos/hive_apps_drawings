@@ -217,7 +217,7 @@ public class Browser extends Activity implements OnRefreshListener {
 			switch (item.getItemId()) {
 			case R.id.action_deletedrawing: {
 
-				deleteDrawing();
+				deleteDrawing(ItemId);
 				mode.finish();
 			}
 				return true;
@@ -332,14 +332,9 @@ public class Browser extends Activity implements OnRefreshListener {
 		mActionMode = this.startActionMode(mActionModeCallback);
 	}
 
-	public void deleteDrawing() {
-		File selectedDrawing = new File(
-				Environment.getExternalStorageDirectory() + "/HIVE/Drawings/"
-						+ fileNamesWithExtentions.get(ItemId));
-		Log.d("TAG", ItemId + "");
-		Log.d("TAG", selectedDrawing + "");
-		selectedDrawing.delete();
-		reload();
+	public void deleteDrawing(int position) {
+		new DeleteTask().execute(mDrawingIds.get(position));
+        reload();
 	}
 
 	public void reload() {
@@ -522,4 +517,14 @@ public class Browser extends Activity implements OnRefreshListener {
         }
     }
 
+    private class DeleteTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String response = HttpRequest.get(getString(R.string.api_base) + new HiveHelper().getUniqueId() + getString(R.string.api_delete_drawing)).send("item=" + strings[0]).body();
+            Log.d("RESPONSE", response);
+
+            return null;
+        }
+    }
 }
