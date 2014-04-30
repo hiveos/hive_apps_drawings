@@ -47,8 +47,10 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 public class Browser extends Activity implements OnRefreshListener {
 
@@ -74,6 +76,8 @@ public class Browser extends Activity implements OnRefreshListener {
 
 	GridView imagegrid;
 
+    LinearLayout mNoNotebooks;
+
 	int firstTime = 1;
 
 	private PullToRefreshLayout mPullToRefreshLayout;
@@ -88,7 +92,10 @@ public class Browser extends Activity implements OnRefreshListener {
 		getFromSdcard();
 
 		imagegrid = (GridView) findViewById(R.id.gridview);
-		imageAdapter = new ImageAdapter();
+
+        mNoNotebooks = (LinearLayout) findViewById(R.id.no_notebook);
+
+        imageAdapter = new ImageAdapter();
 		imagegrid.setAdapter(imageAdapter);
 
 		File DrawingsDir = new File(Environment.getExternalStorageDirectory()
@@ -466,38 +473,57 @@ public class Browser extends Activity implements OnRefreshListener {
 
 			File file = null;
 
-			for (int i = 0; i <= mDrawings.length; i++) {
+            if (mDrawings != null) {
+                for (int i = 0; i <= mDrawings.length; i++) {
 
-				try {
-					HttpRequest request = HttpRequest.post(url).send(
-							"item=" + mDrawingIds.get(i) + "&page=1");
+                    try {
+                        HttpRequest request = HttpRequest.post(url).send(
+                                "item=" + mDrawingIds.get(i) + "&page=1");
 
-					if (request.ok()) {
-						file = new File(
-								Environment.getExternalStorageDirectory()
-										+ "/HIVE/Drawings/"
-										+ mDrawingIds.get(i) + ".png");
-						request.receive(file);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+                        if (request.ok()) {
+                            file = new File(
+                                    Environment.getExternalStorageDirectory()
+                                            + "/HIVE/Drawings/"
+                                            + mDrawingIds.get(i) + ".png"
+                            );
+                            request.receive(file);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                Browser.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imagegrid.setVisibility(View.VISIBLE);
+                        mNoNotebooks.setVisibility(View.GONE);
+                    }
+                });
+            } else {
+                Browser.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imagegrid.setVisibility(View.INVISIBLE);
+                        mNoNotebooks.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
 			return params[0];
 		}
 
 		@Override
 		protected void onPostExecute(final String reload) {
 			Browser.this.runOnUiThread(new Runnable() {
-				public void run() {
-					GridView mGridView = (GridView) findViewById(R.id.gridview);
-					mGridView.setVisibility(View.VISIBLE);
-					if (reload.equals("reload")) {
-						reload();
-					}
-					mPullToRefreshLayout.setRefreshComplete();
-				}
-			});
+                public void run() {
+                    GridView mGridView = (GridView) findViewById(R.id.gridview);
+                    mGridView.setVisibility(View.VISIBLE);
+                    if (reload.equals("reload")) {
+                        reload();
+                    }
+                    mPullToRefreshLayout.setRefreshComplete();
+                }
+            });
 		}
 
 	}

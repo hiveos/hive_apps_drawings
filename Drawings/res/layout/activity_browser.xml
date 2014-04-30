@@ -2,20 +2,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    tools:context=".Browser">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="73dp"
         android:background="#9933CC"
-        android:orientation="vertical" >
-    </LinearLayout>
+        android:orientation="vertical"></LinearLayout>
 
-    <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/ptr_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
 
         <GridView
             android:id="@+id/gridview"
@@ -32,6 +32,24 @@
             android:stretchMode="columnWidth"
             android:verticalSpacing="5dp"
             android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/no_notebook"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="100dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/RobotoTextViewStyleLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Drawings!"
+                android:textColor="#7a7a7a"
+                android:textSize="26sp" />
+        </LinearLayout>
     </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
 
 </LinearLayout>
